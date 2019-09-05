@@ -1,4 +1,4 @@
-e# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 -------------------------------------------------
    File Name:       Tre
@@ -71,8 +71,67 @@ class Solution:
                         node = node.right
 
             return output
+'''
+94. Binary Tree Inorder Traversal: 二叉树的中序遍历
+describe: 给定一个二叉树，返回它的中序 遍历。
+'''
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        # 方法一 递归
+        # out = []
+        # if root == None:
+        #     return []
+        # out.extend(self.inorderTraversal(root.left))
+        # out.append(root.val)
+        # out.extend(self.inorderTraversal(root.right))
+        # return out
 
+        # 方法二 迭代
+        stack, out = [], []
+        if root:
+            stack = [root]
+        while stack:
+            node = stack.pop()
+            if type(node) == int:
+                out.append(node)
+                continue
+            if node.right:
+                stack.append(node.right)
+            stack.append(node.val)
+            if node.left:
+                stack.append(node.left)
+        return out
 
+'''
+145. Binary Tree Postorder Traversal: 二叉树的后序遍历
+describe: 给定一个二叉树，返回它的后序遍历。
+'''
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        # 方法一 递归
+        # out = []
+        # if root == None:
+        #     return []
+        # out.extend(self.postorderTraversal(root.left))
+        # out.extend(self.postorderTraversal(root.right))
+        # out.append(root.val)
+        # return out
+
+        # 方法二 迭代
+        stack, out = [], []
+        if root:
+            stack = [root]
+        while stack:
+            node = stack.pop()
+            if type(node) == int:
+                out.append(node)
+                continue
+            stack.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return out
 
 
 
