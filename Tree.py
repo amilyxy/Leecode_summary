@@ -86,7 +86,7 @@ class Solution:
         # out.extend(self.inorderTraversal(root.right))
         # return out
 
-        # 方法二 迭代
+        # 方法二 堆栈的方法 空间复杂度相当的高
         stack, out = [], []
         if root:
             stack = [root]
@@ -101,6 +101,17 @@ class Solution:
             if node.left:
                 stack.append(node.left)
         return out
+
+        # 评论方法 这个方法很不错！！
+        ret, st, n = [], [], root
+        while n or st:
+            while n:
+                st.append(n)
+                n = n.left
+            n = st.pop()
+            ret.append(n.val)
+            n = n.right
+        return ret
 
 '''
 145. Binary Tree Postorder Traversal: 二叉树的后序遍历
@@ -117,7 +128,7 @@ class Solution:
         # out.append(root.val)
         # return out
 
-        # 方法二 迭代
+        # 方法二 迭代 空间复杂度相当的高
         stack, out = [], []
         if root:
             stack = [root]
