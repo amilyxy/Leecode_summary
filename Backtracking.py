@@ -69,7 +69,7 @@ class Solution:
     # 方法五： 回溯算法2 + stack
     '''
     ⭐ 加精!  
-    根据子集的长度从[0, len(nums)]进行遍历回溯
+    根据子集的长度从[0, len(nums)]进行遍历回溯, 其实和前面的差不多
     '''
     def subsets(self, nums):
         L = len(nums)
@@ -180,3 +180,5 @@ class Solution:
         return res
 
     # 好像还可以用掩码的方法
+
+
