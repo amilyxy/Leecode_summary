@@ -53,7 +53,6 @@ class Solution:
             # print(rest)
         return rest
 
-
 '''
 62. Unique Paths: 不同路径
 describe: 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
@@ -91,7 +90,55 @@ class Solution:
                 dp[i][j] = dp[i-1][j] + dp[i][j-1]
         return dp[-1][-1]
     # 官方提供的还有两种优化算法，可以看一下，有点难理解
+    # 方法三 优化一
+    def uniquePaths(self, m: int, n: int) -> int:
+        pre = [1] * n
+        cur = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                cur[j] = pre[j] + cur[j-1]
+            pre = cur[:]
+        return pre[-1]
 
+'''
+63. Unique PathsII: 不同路径II
+describe: 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+          机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+          现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+'''
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: list[list[int]]) -> int:
+        # 方法一
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+        pre = [1] * n
+        col = [1] * m
+        cur = [1] * n
+        for k in range(n):
+            if obstacleGrid[0][k] == 1:
+                pre[k:] = [0] * (n - k)
+                break
+        # print(pre)
+        for z in range(m):
+            if obstacleGrid[z][0] == 1:
+                col[z:] = [0] * (m - z)
+                break
+        # print(col)
+        if m == 1:
+            return pre[-1]
+        if n == 1:
+            return col[-1]
+        for i in range(1, m):
+            for j in range(1, n):
+                # 对每一列第一个 初始化
+                cur[0] = col[i]
+                if obstacleGrid[i][j] == 1:
+                    cur[j] = 0
+                    continue
+                else:
+                    cur[j] = pre[j] + cur[j - 1]
+            pre = cur[:]
+        return cur[-1]
 
 
 
