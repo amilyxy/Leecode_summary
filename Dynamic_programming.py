@@ -99,6 +99,13 @@ class Solution:
                 cur[j] = pre[j] + cur[j-1]
             pre = cur[:]
         return pre[-1]
+    # 方法三 优化二
+    def uniquePaths(self, m: int, n: int) -> int:
+        cur = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                cur[j] += cur[j - 1]
+        return cur[-1]
 
 '''
 63. Unique PathsII: 不同路径II
@@ -139,6 +146,16 @@ class Solution:
                     cur[j] = pre[j] + cur[j - 1]
             pre = cur[:]
         return cur[-1]
+
+    # 题解方法
+    # 亮点： 给dp加一个边界，就类似于62题的方法三 优化二
+    def uniquePathsWithObstacles(self, obstacleGrid: list[list[int]]) -> int:
+        m, n = len(obstacleGrid[0]), len(obstacleGrid)
+        dp = [1] + [0] * m
+        for i in range(0, n):
+            for j in range(0, m):
+                dp[j] = 0 if obstacleGrid[i][j] else dp[j] + dp[j - 1]
+        return dp[-2]
 
 
 
