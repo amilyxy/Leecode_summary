@@ -88,3 +88,39 @@ class Solution(object):
             slow = slow.next
             fast = fast.next.next
         return True
+
+'''
+24. Swap Nodes in Pairs: 两两交换链表中的节点
+describe: 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+          你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+'''
+class Solution:
+    # 自己写的-算是迭代法吧...
+    def swapPairs(self, head: ListNode) -> ListNode:
+        # 初始化
+        if head == None or head.next == None:
+            return head
+        else:
+            pre = None
+            cur = head
+            nextnode = head.next
+        # 交换
+        while 1:
+            temp = nextnode.next
+            cur.next = temp
+            nextnode.next = cur
+            if pre == None:
+                head = nextnode
+                pass
+            else:
+                pre.next = nextnode
+            if temp == None:
+                break
+            elif temp.next == None:
+                break
+            pre = cur
+            cur = temp
+            nextnode = cur.next
+        return head
+
+
