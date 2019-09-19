@@ -55,7 +55,7 @@ describe: 给定一个链表，判断链表中是否有环。
 #         self.next = None
 
 class Solution(object):
-    # 感觉不太好 修改了链表元素
+    # 题解方法一 感觉不太好 修改了链表元素
     def hasCycle(self, head):
         if not head:
             return False
@@ -66,7 +66,7 @@ class Solution(object):
             return False
         return True  # 否则有环
 
-    # 类似于官方题解里面的哈希表 没必要用dict
+    # 题解方法二 类似于官方题解里面的哈希表 没必要用dict
     def hasCycle(self, head):
         p = head
         st = set()
@@ -76,3 +76,15 @@ class Solution(object):
             st.add(p)
             p = p.next
         return False
+
+    # 用python实现快慢指针？
+    def hasCycle(self, head):
+        if head == None or head.next == None:
+            return False
+        fast, slow = head.next, head
+        while slow != fast:
+            if fast == None or fast.next == None:
+                return False
+            slow = slow.next
+            fast = fast.next.next
+        return True
