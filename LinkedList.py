@@ -95,7 +95,7 @@ describe: 给定一个链表，两两交换其中相邻的节点，并返回交�
           你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
 '''
 class Solution:
-    # 自己写的-算是迭代法吧...
+    # 自己写的-算是迭代法吧... 其实是有点繁琐的
     def swapPairs(self, head: ListNode) -> ListNode:
         # 初始化
         if head == None or head.next == None:
@@ -114,13 +114,29 @@ class Solution:
                 pass
             else:
                 pre.next = nextnode
-            if temp == None:
-                break
-            elif temp.next == None:
+            if temp == None or temp.next == None:
                 break
             pre = cur
             cur = temp
             nextnode = cur.next
-        return head
+
+    '''
+    ⭐ 加精!  
+    递归大法好！ 时候总结一下递归的套路了 移步总结
+    '''
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        nextnode = head.next
+        head.next = self.swapPairs(nextnode.next)
+        nextnode.next = head
+        return nextnode
+
+    '''
+    ⭐ 加精!  
+    这里面的非递归版本二解法思想还挺不错的
+    需要的节点比较少
+    https://leetcode-cn.com/problems/swap-nodes-in-pairs/solution/di-gui-2chong-fei-di-gui-by-heng-29/
+    '''
 
 
