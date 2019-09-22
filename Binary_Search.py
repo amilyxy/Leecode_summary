@@ -54,3 +54,48 @@ class Solution:
                 l = badhelper(mid+1, r)
             return l
         return badhelper(1, n)
+
+'''
+35. Search Insert Position 搜索插入位置
+describe: 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+          你可以假设数组中无重复元素。
+'''
+class Solution:
+    # 迭代方法
+    # 按理说也可以改成递归方法
+    def searchInsert(self, nums: list[int], target: int) -> int:
+        if len(nums) == 1:
+            if target > nums[0]:
+                return 1
+            else:
+                return 0
+        l, r = 0, (len(nums) - 1)
+        while l < r:
+            mid = l + (r - l) // 2
+            if nums[mid] > target:
+                r = mid - 1
+            if nums[mid] < target:
+                l = mid + 1
+            if nums[mid] == target:
+                return mid
+        if nums[l] >= target:
+            return l
+        else:
+            return l + 1
+    '''
+    ⭐ 加精!  
+    看完题解之后的简化版本
+    '''
+    def searchInsert(self, nums: list[int], target: int) -> int:
+        l, r = 0, (len(nums) - 1)
+        while l <= r:
+            mid = l + (r - l) // 2
+            if nums[mid] > target:
+                r = mid - 1
+            if nums[mid] < target:
+                l = mid + 1
+            if nums[mid] == target:
+                return mid
+        return l
+
+
