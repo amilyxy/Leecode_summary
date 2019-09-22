@@ -98,4 +98,32 @@ class Solution:
                 return mid
         return l
 
+'''
+33. Search in Rotated Sorted Array 搜索旋转排序数组
+describe: 略略略
+'''
+class Solution:
+    # 太难了呀 要搞明白+1 -1
+    def search(self, nums: list[int], target: int) -> int:
+        if len(nums)==0:
+            return -1
+        l, r = 0, (len(nums)-1)
+        while l<r:
+            mid = l+(r-l)//2
+            # 说明左边是顺的
+            if nums[l]<nums[mid]:
+                if nums[l]<= target <= nums[mid]:
+                    r = mid
+                else:
+                    l = mid+1
+            # 说明右边顺的
+            else:
+                if nums[mid+1] <= target <= nums[r]:
+                    l = mid+1
+                else:
+                    r = mid
+        if nums[l] == target:
+            return l
+        else:
+            return -1
 
