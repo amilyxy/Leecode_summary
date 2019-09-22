@@ -41,3 +41,16 @@ class Solution:
             else:
                 l = mid + 1
         return l
+
+    # 递归方法
+    def firstBadVersion(self, n):
+        def badhelper(l, r):
+            if l == r:
+                return l
+            mid = l+(r-l)//2
+            if isBadVersion(mid):
+                l = badhelper(l, mid)
+            else:
+                l = badhelper(mid+1, r)
+            return l
+        return badhelper(1, n)
