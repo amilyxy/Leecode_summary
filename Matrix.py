@@ -62,3 +62,82 @@ class Solution:
                 matrix[n - 1 - i][n - j - 1] = matrix[j][n - 1 - i]
                 matrix[j][n - 1 - i] = matrix[i][j]
                 matrix[i][j] = tmp
+
+'''
+54. Rotate Image: 旋转图像
+describe: 给定一个包含 m x n 个元素的矩阵（m 行, n 列）
+          请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+'''
+class Solution:
+    # 题解方法就不写了
+    def spiralOrder(self, matrix: list[list[int]]) -> list[int]:
+        res = []
+        if len(matrix) == 0:
+            return res
+        n = len(matrix[0])
+        m = len(matrix)
+        ring = (min(m, n) + 1) // 2
+        for i in range(ring):
+            # 行
+            row, col = i, list(range(i, n - i))
+            res.extend([matrix[row][z] for z in col])
+            print(res)
+
+            row, col = list(range(i + 1, m - i)), col[-1]
+            res.extend([matrix[z][col] for z in row])
+
+            if len(row) != 0:
+                row, col = row[-1], list(range(n - i - 2, i - 1, -1))
+                res.extend([matrix[row][z] for z in col])
+            else:
+                return res
+
+            if len(col) != 0:
+                row, col = list(range(m - i - 2, i, -1)), col[-1]
+                res.extend([matrix[z][col] for z in row])
+            else:
+                return res
+
+        return res
+
+'''
+54. Rotate Image: 旋转图像
+describe: 给定一个包含 m x n 个元素的矩阵（m 行, n 列）
+          请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+'''
+class Solution:
+    def generateMatrix(self, n: int) -> list[list[int]]:
+        res = list(range(1, n * n + 1))
+        matrix = [[0 for i in range(n)] for j in range(n)]
+        ring = (n + 1) // 2
+        for i in range(ring):
+            # 行
+            row, col = i, list(range(i, n - i))
+            for z in col:
+                matrix[row][z] = res[0]
+                res.pop(0)
+
+            row, col = list(range(i + 1, n - i)), col[-1]
+            for z in row:
+                matrix[z][col] = res[0]
+                res.pop(0)
+
+            if len(row) != 0:
+                row, col = row[-1], list(range(n - i - 2, i - 1, -1))
+                for z in col:
+                    matrix[row][z] = res[0]
+                    res.pop(0)
+            else:
+                return matrix
+            print(matrix)
+
+            if len(col) != 0:
+                row, col = list(range(n - i - 2, i, -1)), col[-1]
+                for z in row:
+                    matrix[z][col] = res[0]
+                    res.pop(0)
+            else:
+                return matrix
+
+        return matrix
+
