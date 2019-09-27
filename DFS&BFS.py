@@ -66,3 +66,90 @@ class Solution:
                                 queue.append((new_i, new_j))
                                 marked[new_i][new_j] = 1
         return islands
+
+'''
+130. Surrounded Regions: 被围绕的区域
+describe: 给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
+          找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+feeling: 啊啊啊终于做出来了
+'''
+from collections import deque
+# BFS方法
+class Solution:
+    def solve(self, board: list[list[str]]) -> None:
+        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        m = len(board)
+        if m == 0:
+            return 0
+        n = len(board[0])
+        marked = [[0 for _ in range(n)] for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O' and not marked[i][j]:
+                    queue = deque()
+                    change = deque()
+                    queue.append((i, j))
+                    change.append((i, j))
+                    marked[i][j] == 1
+                    flag = 0
+                    while queue:
+                        x, y = queue.popleft()
+                        # 这里pop()也可以呐
+                        if x == 0 or y == 0 or x == (m - 1) or y == (n - 1):
+                            flag = 1
+                        for dire in directions:
+                            new_x = x + dire[0]
+                            new_y = y + dire[1]
+                            if (0 <= new_x < m) and (0 <= new_y < n) and not marked[new_x][new_y] and board[new_x][
+                                new_y] == 'O':
+                                queue.append((new_x, new_y))
+                                change.append((new_x, new_y))
+                                marked[new_x][new_y] = 1
+                    if flag == 0:
+                        self.changex2o(change, board)
+
+    def changex2o(self, change, obj):
+        while change:
+            x, y = change.pop()
+            obj[x][y] = 'X'
+
+# DFS方法 这个真的想了好久我佛了 还是写的有点不熟练 多多联系！！！
+class Solution:
+    directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    flag = 0
+    change = deque()
+
+    def solve(self, board: list[list[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        m = len(board)
+        if m == 0:
+            return 0
+        n = len(board[0])
+        marked = [[0 for _ in range(n)] for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O' and not marked[i][j]:
+                    self.flag = 0
+                    self.dfs(board, marked, i, j, m, n)
+                    if self.flag == 0:
+                        self.changex2o(self.change, board)
+                    self.change.clear()
+
+    def dfs(self, board, marked, i, j, m, n):
+        if i == 0 or j == 0 or i == (m - 1) or j == (n - 1):
+            self.flag = 1
+        marked[i][j] = 1
+        self.change.append((i, j))
+        for dire in self.directions:
+            new_i = i + dire[0]
+            new_j = j + dire[1]
+            if (0 <= new_i < m) and (0 <= new_j < n) and not marked[new_i][new_j] and board[new_i][new_j] == 'O':
+                self.dfs(board, marked, new_i, new_j, m, n)
+
+    def changex2o(self, change, obj):
+        while change:
+            x, y = change.pop()
+            obj[x][y] = 'X'
+
