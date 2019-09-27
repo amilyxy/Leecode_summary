@@ -129,7 +129,6 @@ class Solution:
                     res.pop(0)
             else:
                 return matrix
-            print(matrix)
 
             if len(col) != 0:
                 row, col = list(range(n - i - 2, i, -1)), col[-1]
