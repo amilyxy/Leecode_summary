@@ -118,7 +118,6 @@ class Solution:
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
     flag = 0
     change = deque()
-
     def solve(self, board: list[list[str]]) -> None:
         """
         Do not return anything, modify board in-place instead.
@@ -153,3 +152,37 @@ class Solution:
             x, y = change.pop()
             obj[x][y] = 'X'
 
+# 题解方法：
+
+
+'''
+127. Word Ladder: 单词接龙
+describe: 给定两个单词（beginWord 和 endWord）和一个字典
+          找到从 beginWord 到 endWord 的最短转换序列的长度。
+feeling: 超时使人绝望
+'''
+from collections import deque
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        # # 超时超时烦死了
+        queue = set()
+        queue.add(beginWord)
+        res = 0
+        n = len(beginWord)
+        # 首先我真的是百思不得其解 为什么要对set(wordList) 删掉这行就超时
+        wordList = set(wordList)
+        while queue:
+            queue_next = set()
+            # 获取一个字符不同的单词
+            for cur in queue:
+                for i in range(n):
+                    for a in range(97, 123):
+                        st = cur[:i] + chr(a) + cur[i+1:]
+                        if st in wordList:
+                            if st == endWord:
+                                return res + 2
+                            queue_next.add(st)
+                            wordList.remove(st)
+            res += 1
+            queue = queue_next
+        return 0

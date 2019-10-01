@@ -25,7 +25,7 @@ describe: 编写一个函数来查找字符串数组中的最长公共前缀。
           如果不存在公共前缀，返回空字符串 ""。
 '''
 class Solution:
-    def longestCommonPrefix(self, strs: List[str]) -> str:
+    def longestCommonPrefix(self, strs: list[str]) -> str:
         # 方法1 44ms
         if len(strs) == 0:
             return ""

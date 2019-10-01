@@ -64,7 +64,7 @@ class Solution:
                 matrix[i][j] = tmp
 
 '''
-54. Rotate Image: 旋转图像
+54. Spiral Matrix: 螺旋矩阵
 describe: 给定一个包含 m x n 个元素的矩阵（m 行, n 列）
           请按照顺时针螺旋顺序，返回矩阵中的所有元素。
 '''
@@ -99,11 +99,20 @@ class Solution:
                 return res
 
         return res
+    # 题解简单方法（比较难理解
+    def spiralOrder(self, matrix: list[list[int]]) -> list[int]:
+        res = []
+        while matrix:
+            res += matrix.pop(0)
+            matrix = list(map(list, zip(*matrix)))[::-1]
+            print(matrix)
+        return res
+
 
 '''
-54. Rotate Image: 旋转图像
-describe: 给定一个包含 m x n 个元素的矩阵（m 行, n 列）
-          请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+59. Spiral Matrix: 螺旋矩阵II
+describe: 给定一个正整数 n，生成一个包含 1 到 n2 所有元素
+          且元素按顺时针顺序螺旋排列的正方形矩阵。
 '''
 class Solution:
     def generateMatrix(self, n: int) -> list[list[int]]:
