@@ -163,13 +163,14 @@ feeling: 超时使人绝望
 '''
 from collections import deque
 class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: list[str]) -> int:
         # # 超时超时烦死了
         queue = set()
         queue.add(beginWord)
         res = 0
         n = len(beginWord)
         # 首先我真的是百思不得其解 为什么要对set(wordList) 删掉这行就超时
+        # 应该是跟set和list操作的时间复杂度有关 具体简书里对应题目有写
         wordList = set(wordList)
         while queue:
             queue_next = set()
@@ -178,6 +179,7 @@ class Solution:
                 for i in range(n):
                     for a in range(97, 123):
                         st = cur[:i] + chr(a) + cur[i+1:]
+                        # 时间复杂度为O(1) 而list为O(n)
                         if st in wordList:
                             if st == endWord:
                                 return res + 2
@@ -185,4 +187,33 @@ class Solution:
                             wordList.remove(st)
             res += 1
             queue = queue_next
+        return 0
+
+    # 题解方法-双向bfs @powcai
+    # 通过对比官方题解还是觉得这个比较简洁
+    def ladderLength(self, beginWord: str, endWord: str, wordList: list[str]) -> int:
+        if endWord not in wordList:
+            return 0
+        wordict = set(wordList)
+        s1 = {beginWord}
+        s2 = {endWord}
+        n = len(beginWord)
+        step = 0
+        wordict.remove(endWord)
+        while s1 and s2:
+            step += 1
+            if len(s1)>len(s2):
+                s1, s2 = s2, s1
+            s = set()
+            for word in s1:
+                nextword = [word[:i] + chr(a) + word[i+1:] for a in range(97, 123) for i in range(n)]
+                for w in nextword:
+                    if w in s2:
+                        return step+1
+                    if w not in wordict:
+                        continue
+                    wordict.remove(w)
+                    s.add(w)
+            print(s)
+            s1 = s
         return 0
