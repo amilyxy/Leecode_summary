@@ -190,6 +190,7 @@ class Solution:
         return 0
 
     # 题解方法-双向bfs @powcai
+    # 该方法每次从中间结果较少的一端bfs，剪枝掉了许多不必要的搜索过程
     # 通过对比官方题解还是觉得这个比较简洁
     def ladderLength(self, beginWord: str, endWord: str, wordList: list[str]) -> int:
         if endWord not in wordList:
@@ -214,6 +215,6 @@ class Solution:
                         continue
                     wordict.remove(w)
                     s.add(w)
-            print(s)
+            # print(s)
             s1 = s
         return 0
