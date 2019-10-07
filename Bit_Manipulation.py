@@ -87,4 +87,24 @@ class Solution:
             # reduce(lambda x, y: x^y, nums)
             return res
 
+'''
+318. Maximum Product of Word Lengths: 最大单词长度乘积
+describe: 给定一个字符串数组 words，找到 length(word[i]) * length(word[j]) 的最大值，
+          并且这两个单词不含有公共字母。你可以认为每个单词只包含小写字母。
+          如果不存在这样的两个单词，返回 0。
+'''
+class Solution:
+    # 题解方法一： @麦麦麦麦子。
+    def maxProduct(self, words: list[str]) -> int:
+        # 直观的版本，主要通过位运算来判断字母位
+        max_len = {}
+        for word in words:
+            flag = 0  # flag用26位二进制表示该词使用了的字母
+            for alp in word:
+                flag |= 1 << ord(alp) - 97  # 置字母对应的二进制位为1
+            max_len[flag] = max(max_len.get(flag, 0), len(word))  # 更新当前flag的最大长度
+        # [0]用来避免对空列表取max，下面的比较次数为n^2
+        return max([0] + [max_len[x] * max_len[y] for x in max_len for y in max_len if x & y == 0])
+
+
 
