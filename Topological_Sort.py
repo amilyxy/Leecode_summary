@@ -30,3 +30,81 @@ class Solution:
             if not dfs(i, adjacency, flags): return False
         return True
 
+# 拓扑排序方法 @liweiwei1419
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        classli = [[] for _ in range(numCourses)]
+        classin = [0 for _ in range(numCourses)]
+        for pos, pre in prerequisites:
+            classli[pre].append(pos)
+            classin[pos] += 1
+        queue = []
+        for i in range(numCourses):
+            if classin[i] == 0:
+                queue.append(i)
+
+        count = 0
+        while queue:
+            i = queue.pop()
+            count += 1
+            for j in classli[i]:
+                classin[j] -= 1
+                if classin[j] == 0:
+                    queue.append(j)
+        return count == numCourses
+
+'''
+210. Course ScheduleII： 课程表II
+'''
+# 拓扑排序方法
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        classli = [[] for _ in range(numCourses)]
+        classin = [0 for _ in range(numCourses)]
+        for pos, pre in prerequisites:
+            classli[pre].append(pos)
+            classin[pos] += 1
+        queue = []
+        for i in range(numCourses):
+            if classin[i] == 0:
+                queue.append(i)
+
+        res= []
+        while queue:
+            i = queue.pop()
+            res.append(i)
+            for j in classli[i]:
+                classin[j] -= 1
+                if classin[j] == 0:
+                    queue.append(j)
+        if len(res) == numCourses:
+            return []
+        return res
+ # DFS 方法
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        def dfs(i, adjacency, flags):
+            if flags[i] == -1: return True
+            if flags[i] == 1: return False
+            flags[i] = 1
+            for j in adjacency[i]:
+                if not dfs(j, adjacency, flags): return False
+            res.append(i)
+            flags[i] = -1
+            return True
+
+        res = []
+        adjacency = [[] for _ in range(numCourses)]
+        flags = [0 for _ in range(numCourses)]
+        for cur, pre in prerequisites:
+            adjacency[pre].append(cur)
+        for i in range(numCourses):
+            if not dfs(i, adjacency, flags): return []
+        return res
+
+
+
+
+
+
+
