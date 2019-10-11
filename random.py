@@ -98,6 +98,34 @@ class Solution:
             node = node.next
         return res
 
+'''
+380. 常数时间插入、删除和获取 Insert Delete GetRandom O(1)
+'''
+import random
+
+
+class RandomizedSet:
+    def __init__(self):
+        self.li = set()
+
+    def insert(self, val: int) -> bool:
+        if val in self.li:
+            return False
+        self.li.add(val)
+        return True
+
+    def remove(self, val: int) -> bool:
+        if val in self.li:
+            self.li.remove(val)
+            return True
+        else:
+            return False
+
+    def getRandom(self) -> int:
+        listli = list(self.li)
+        i = random.randrange(len(self.li))
+        return listli[i]
+
 
 
 
