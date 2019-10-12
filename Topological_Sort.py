@@ -83,24 +83,35 @@ class Solution:
  # DFS 方法
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
-        def dfs(i, adjacency, flags):
+        def dfs(i, classli, flags):
             if flags[i] == -1: return True
             if flags[i] == 1: return False
             flags[i] = 1
-            for j in adjacency[i]:
-                if not dfs(j, adjacency, flags): return False
+            for j in classli[i]:
+                if not dfs(j, classli, flags): return False
             res.append(i)
             flags[i] = -1
             return True
 
         res = []
-        adjacency = [[] for _ in range(numCourses)]
+        classli = [[] for _ in range(numCourses)]
+        classin = [0 for _ in range(numCourses)]
         flags = [0 for _ in range(numCourses)]
+        begin = []
+        if len(prerequisites) == 0:
+            return [i for i in range(numCourses)]
         for cur, pre in prerequisites:
-            adjacency[pre].append(cur)
+            classli[pre].append(cur)
+            classin[cur] += 1
         for i in range(numCourses):
-            if not dfs(i, adjacency, flags): return []
-        return res
+            if classin[i] == 0:
+                begin.append(i)
+        for i in begin:
+            if not dfs(i, classli, flags): return []
+        if len(res) == numCourses:
+            return res[::-1]
+        else:
+            return []
 
 
 
