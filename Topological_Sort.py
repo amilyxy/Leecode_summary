@@ -98,8 +98,6 @@ class Solution:
         classin = [0 for _ in range(numCourses)]
         flags = [0 for _ in range(numCourses)]
         begin = []
-        if len(prerequisites) == 0:
-            return [i for i in range(numCourses)]
         for cur, pre in prerequisites:
             classli[pre].append(cur)
             classin[cur] += 1
