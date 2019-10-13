@@ -64,11 +64,7 @@ class Solution:
         for pos, pre in prerequisites:
             classli[pre].append(pos)
             classin[pos] += 1
-        queue = []
-        for i in range(numCourses):
-            if classin[i] == 0:
-                queue.append(i)
-
+        queue = [i for i in range(numCourses) if classin[i] == 0]
         res= []
         while queue:
             i = queue.pop()
@@ -79,7 +75,8 @@ class Solution:
                     queue.append(j)
         if len(res) == numCourses:
             return []
-        return res
+        return res if len(res) == numCourses else []
+
  # DFS 方法
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
@@ -97,19 +94,13 @@ class Solution:
         classli = [[] for _ in range(numCourses)]
         classin = [0 for _ in range(numCourses)]
         flags = [0 for _ in range(numCourses)]
-        begin = []
         for cur, pre in prerequisites:
             classli[pre].append(cur)
             classin[cur] += 1
-        for i in range(numCourses):
-            if classin[i] == 0:
-                begin.append(i)
+        begin = [i for i in range(numCourses) if classin[i] == 0]
         for i in begin:
             if not dfs(i, classli, flags): return []
-        if len(res) == numCourses:
-            return res[::-1]
-        else:
-            return []
+        return res[::-1] if len(res) == numCourses else []
 
 
 
