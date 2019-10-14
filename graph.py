@@ -16,39 +16,17 @@ class Node:
 class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
         marked = {}
-        newnode = Node(None, [])
+        newnode = Node(node.val, [])
         self.dfs(node, marked, newnode)
         return newnode
 
     def dfs(self, node, marked, newnode):
-        newnode.val = node.val
-        marked[node.val] = newnode
-        for nei in node.neighbors:
-            # print(nei.val)
-            if nei.val not in marked:
-                temp = Node(None, [])
-                newnode.neighbors.append(temp)
-                self.dfs(nei, marked, newnode.neighbors[-1])
-            else:
-                for i in marked:
-                    if nei.val == i:
-                        newnode.neighbors.append(marked[i])
-
-# 看完题解的改进版
-class Solution:
-    def cloneGraph(self, node: 'Node') -> 'Node':
-        marked = {}
-        newnode = Node(None, [])
-        self.dfs(node, marked, newnode)
-        return newnode
-
-    def dfs(self, node, marked, newnode):
-        newnode.val = node.val
+        # newnode.val = node.val
         marked[node] = newnode
         for nei in node.neighbors:
-            print(nei.val)
+            # print(nei.val)
             if nei not in marked:
-                temp = Node(None, [])
+                temp = Node(nei.val, [])
                 newnode.neighbors.append(temp)
                 self.dfs(nei, marked, newnode.neighbors[-1])
             else:
