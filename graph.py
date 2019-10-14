@@ -66,6 +66,54 @@ class Solution:
                 marked[curnode].neighbors.append(marked[nei])
         return newnode
 
+'''
+399. Evaluate Division 除法求值
+'''
+# 先构建数据图 然后DFS遍历
+# 题外话： 感觉我写的好复杂？？？
+class Solution:
+    def calcEquation(self, equations: list[List[str]], values: list[float], queries: list[list[str]]) -> list[
+        float]:
+        datagraph = {}
+        n = len(values)
+        # 构建datagraph
+        for i in range(n):
+            if equations[i][0] not in datagraph:
+                datagraph[equations[i][0]] = [[equations[i][1], values[i]]]
+            else:
+                for j in datagraph[equations[i][0]]:
+                    if equations[i][1] not in j:
+                        datagraph[equations[i][0]].append([equations[i][1], values[i]])
+
+            if equations[i][1] not in datagraph:
+                datagraph[equations[i][1]] = [[equations[i][0], 1. / values[i]]]
+            else:
+                for j in datagraph[equations[i][1]]:
+                    if equations[i][0] not in j:
+                        datagraph[equations[i][1]].append([equations[i][0], 1. / values[i]])
+        print(datagraph)
+        res = []
+        for query in queries:
+            marked = []
+            # if query[0] not in datagraph:
+            #     res.append(-1)
+            # else:
+            res.append(self.dfs(query[0], query[1], datagraph, marked))
+        return res
+
+    def dfs(self, a, b, datagraph, marked):
+        if a not in datagraph:
+            return -1
+        for j in datagraph[a]:
+            if j[0] == b:
+                return j[1]
+            elif [a, j[0]] not in marked:
+                marked.append([a, j[0]])
+                temp = self.dfs(j[0], b, datagraph, marked)
+                if temp != -1:
+                    return j[1] * temp
+        return -1
+
 
 
 
