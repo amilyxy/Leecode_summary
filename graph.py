@@ -114,8 +114,64 @@ class Solution:
                     return j[1] * temp
         return -1
 
+'''
+310 Minimum Height Trees 最小高度的树
+'''
+# 给我超时的答案一波画面
+from collections import defaultdict
+from collections import deque
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        res = {}
+        dictdata = defaultdict(set)
+        for edge in edges:
+            dictdata[edge[0]].add(edge[1])
+            dictdata[edge[1]].add(edge[0])
+        # print(dictdata)
+        for i in range(n):
+            marked = [0 for _ in range(n)]
+            depth = 0
+            queue = deque()
+            queue.append(i)
+            while queue:
+                dep = len(queue)
+                for _ in range(dep):
+                    a = queue.popleft()
+                    marked[a] = 1
+                    for k in dictdata[a]:
+                        if not marked[k]:
+                            queue.append(k)
+                depth += 1
+            res[i] = depth-1
+        out = set()
+        a = min([res[i] for i in res])
+        for key in res:
+            if res[key] == a:
+                out.add(key)
+        return out
 
-
+# 题解方法一： @typingMonkey
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        res = {}
+        dictdata = defaultdict(set)
+        for edge in edges:
+            dictdata[edge[0]].add(edge[1])
+            dictdata[edge[1]].add(edge[0])
+        # print(dictdata)
+        indegree = [i for i in dictdata if len(dictdata[i])==1 ]
+        if n == 1:
+            return [0]
+        while n > 2:
+            t = set()
+            for i in indegree:
+                a = dictdata[i].pop()
+                dictdata[a].remove(i)
+                if len(dictdata[a]) == 1:
+                    t.add(a)
+                n -= 1
+            indegree = t
+        return indegree
 
 
 
