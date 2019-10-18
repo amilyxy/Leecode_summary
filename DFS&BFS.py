@@ -113,7 +113,7 @@ class Solution:
             x, y = change.pop()
             obj[x][y] = 'X'
 
-# DFS方法 这个真的想了好久我佛了 还是写的有点不熟练 多多联系！！！
+# DFS方法 这个真的想了好久我佛了 还是写的有点不熟练 多多练习！！！
 class Solution:
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
     flag = 0
