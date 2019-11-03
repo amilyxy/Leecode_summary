@@ -174,3 +174,71 @@ class LRUCache:
             new.next = self.tail
             self.tail.prev.next = new
             self.tail.prev = new
+
+'''
+355. Design Twitter：设计推特
+'''
+from collections import defaultdict
+from collections import OrderedDict
+
+class Twitter:
+    def __init__(self):
+        self.follower = defaultdict(set)
+        self.tweet = OrderedDict()
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.tweet[tweetId] = userId
+        self.tweet.move_to_end(tweetId, last=False)
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        gettweet = []
+        follwer = self.follower[userId]
+        follwer.add(userId)
+        for i in self.tweet:
+            if (self.tweet[i] in follwer):
+                gettweet.append(i)
+            if len(gettweet) >= 10:
+                break
+        return gettweet
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followeeId not in self.follower[followerId]:
+            self.follower[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followeeId in self.follower[followerId]:
+            self.follower[followerId].remove(followeeId)
+
+# 评论方法 @kingerious
+'''
+其实我做的时候也有想过要不要加时间戳 
+可行是可行 而且运行时间好像也比我的少 
+但是如果放在真实情况下 几亿用户发了十几亿甚至几百亿的推文 这样时间戳的方法是不是不太可行？？？？（瞎说的
+'''
+import collections
+class Twitter:
+    def __init__(self):
+        self.dic = collections.defaultdict(list)
+        self.timer = 0
+        self.followDict = collections.defaultdict(set)
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.dic[userId].append([tweetId, self.timer])
+        self.timer += 1
+
+    def getNewsFeed(self, userId: int):
+        News = []
+        News += self.dic[userId]
+        for follower in self.followDict[userId]:
+            News += self.dic[follower]
+        News = sorted(News, key=lambda x:x[1], reverse=True)
+        return [news[0] for news in News][:10]
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followeeId not in self.followDict[followerId] and followerId != followeeId:
+            self.followDict[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followeeId in self.followDict[followerId]:
+            self.followDict[followerId].remove(followeeId)
+
