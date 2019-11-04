@@ -124,5 +124,35 @@ class Solution:
                 i += 1
         return i
 
+'''
+189. Rotate Array 旋转数组
+'''
+
+
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # 方法一
+        for i in range(k):
+            nums.insert(0, nums.pop())
+
+        # 方法二
+        n = len(nums)
+        k = k%n
+        nums.extend(nums[:(n-k)])
+        for i in nums[:(n-k)]:
+            nums.remove(i)
+
+        # 方法三
+        n = len(nums)
+        k = k%n
+        for i in nums[:(n-k)]:
+            nums.remove(i)
+            nums.append(i)
+
+
+
 
 
