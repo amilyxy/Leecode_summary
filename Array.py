@@ -127,8 +127,6 @@ class Solution:
 '''
 189. Rotate Array 旋转数组
 '''
-
-
 class Solution:
     def rotate(self, nums: list[int], k: int) -> None:
         """
@@ -151,6 +149,57 @@ class Solution:
         for i in nums[:(n-k)]:
             nums.remove(i)
             nums.append(i)
+
+        # 题解方法 @powcai
+        nums = nums[::-1]
+        nums[:k] = nums[:k][::-1]
+        nums[k:] = nums[k:][::-1]
+
+'''
+41. First Missing Positive 缺失的第一个正数
+'''
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        # 方法一：
+        nums = set(nums)
+        a = list(filter(lambda x: x>0, nums))
+        a.sort()
+        n = len(a)
+        for i in range(1, n+2):
+            if i==n+1 or i!=a[i-1]:
+                return i
+
+        # 方法二：
+        a = set(filter(lambda x: x>0, nums))
+        n = len(a)
+        for i in range(1, n+2):
+            if i not in a:
+                return i
+
+        # 方法三：
+        if nums == []:
+            return 1
+        nums = set(nums)
+        maxnum = max(nums)
+        for i in range(1, maxnum + 2):
+            if i not in nums:
+                return i
+        return 1
+
+    # 题解方法@zhu_shi_fu
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        if (not nums):
+            return 1
+        n = len(nums)
+        for i in range(n):
+            while (0 < nums[i] <= n and nums[i] != nums[nums[i] - 1]):
+                nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]
+        for i in range(n):
+            if (nums[i] != i + 1):
+                return i + 1
+        return n + 1
+
+
 
 
 
