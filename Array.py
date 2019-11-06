@@ -199,7 +199,32 @@ class Solution:
                 return i + 1
         return n + 1
 
+ '''
+ 299. Bulls and Cows 猜数字游戏
+ '''
+ # 我的方法
+class Solution:
+    def getHint(self, secret: str, guess: str) -> str:
+        bulls = 0
+        cows = 0
+        nums = 0
+        n = len(guess)
+        secretdict = {}
+        for i in secret:
+            secretdict[i] = secretdict.setdefault(i, 0) + 1
+        for i in range(n):
+            if guess[i] in secretdict:
+                if secretdict[guess[i]]>0:
+                    nums+=1
+                    secretdict[guess[i]] -= 1
+            if guess[i] == secret[i]:
+                bulls +=1
+        cows = nums-bulls
+        res = ("%sA%sB" % (bulls, cows))
+        return res
 
+# 题解方法
+# 好像题解方法也大同小异  没啥好写了
 
 
 
