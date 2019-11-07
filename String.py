@@ -79,3 +79,63 @@ class Solution:
             return len(s)
         else:
             return (len(s) - i - 1)
+
+'''
+387. First Unique Character in a String 字符串中的第一个唯一字符
+'''
+# 我的方法一
+from collections import OrderedDict
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        sdict = OrderedDict()
+        for i in s:
+            sdict[i] = sdict.setdefault(i, 0) + 1
+        sval = list(sdict.values())
+        skey = list(sdict.keys())
+        if 1 in sval:
+            key = skey[sval.index(1)]
+            print(key)
+            return s.index(key)
+        return -1
+
+# 我的方法二 （这个时间真的短！！ 开心！！！
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        n = len(s)
+        count = set()
+        for i in range(n):
+            if s[i] not in count:
+                if s[i] not in s[i+1:]:
+                    return i
+                else:
+                    count.add(s[i])
+        return -1
+
+'''
+383. Ransom Note 赎金信
+'''
+# 这个方法先把ransom和magazine遍历一次 然后再判断 有点不太高效
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        ransdict = {}
+        magadict = {}
+        for i in ransomNote:
+            ransdict[i] = ransdict.setdefault(i, 0) + 1
+        for i in magazine:
+            magadict[i] = magadict.setdefault(i, 0) + 1
+        for i, j in ransdict.items():
+            if i not in magadict or j > magadict[i]:
+                return False
+        return True
+
+# 我的天哪噜 我是不是做完一轮之后对时间特别敏感... 这个时间超级短！！
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        chars = set(ransomNote)
+        for char in chars:
+            i = ransomNote.count(char)
+            j = magazine.count(char)
+            if i >j:
+                return False
+        return True
+

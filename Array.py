@@ -199,9 +199,9 @@ class Solution:
                 return i + 1
         return n + 1
 
- '''
+'''
  299. Bulls and Cows 猜数字游戏
- '''
+'''
  # 我的方法
 class Solution:
     def getHint(self, secret: str, guess: str) -> str:
