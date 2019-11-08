@@ -90,12 +90,9 @@ class Solution:
         sdict = OrderedDict()
         for i in s:
             sdict[i] = sdict.setdefault(i, 0) + 1
-        sval = list(sdict.values())
-        skey = list(sdict.keys())
-        if 1 in sval:
-            key = skey[sval.index(1)]
-            print(key)
-            return s.index(key)
+        for skey, sval in sdict.items():
+            if sval == 1:
+                return s.index(skey)
         return -1
 
 # 我的方法二 （这个时间真的短！！ 开心！！！
@@ -110,6 +107,25 @@ class Solution:
                 else:
                     count.add(s[i])
         return -1
+
+# counter解法
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        from collections import Counter
+        for k,v in Counter(s).items():
+            if v==1:
+                return s.index(k)
+        return -1
+
+# 题解方法  只需要遍历26次  @imckl
+class Solution(object):
+    def firstUniqChar(self, s: str) -> int:
+        min_unique_char_index = len(s)
+        for c in "abcdefghijklmnopqrstuvwxyz":
+            i = s.find(c)
+            if i != -1 and i == s.rfind(c):
+                min_unique_char_index = min(min_unique_char_index, i)
+        return min_unique_char_index if min_unique_char_index != len(s) else -1
 
 '''
 383. Ransom Note 赎金信
@@ -138,4 +154,72 @@ class Solution:
             if i >j:
                 return False
         return True
+
+# 一行解决
+# collections.Counter(magazine) & collections.Counter(ransomNote) == collections.Counter(ransomNote)
+
+'''
+344. Reverse String 反转字符串
+好像题目的规范解法是双指针
+'''
+class Solution:
+    def reverseString(self, s: list[str]) -> None:
+        # 方法一
+        # s.reverse()
+
+        # 方法二 交换
+        n = len(s)
+        cgnum = n//2
+        for i in range(cgnum):
+            s[i], s[n-i-1] = s[n-i-1], s[i]
+
+        #方法三 不知道这个算不算原地操作
+        s[:] = s[::-1]
+
+'''
+151. Reverse Words in a String 反转字符串里的单词
+'''
+class Solution:
+    # 方法一
+    def reverseWords(self, s: str) -> str:
+        temp = s.split()
+        res = ""
+        for i in temp[::-1]:
+            res = res+i+' '
+        res = res.rstrip()
+        return res
+
+    # 方法二
+    def reverseWords(self, s: str) -> str:
+        temp = s.split()
+        return " ".join(temp[::-1])
+
+    # 感觉还是要用原始方法会比较好 万一面试官说让你自己实现不用高级函数 GG
+    def reverseWords(self, s: str) -> str:
+        lists = []
+        wordl=0
+        wordr=0
+        n = len(s)
+        res = ""
+        while wordr<n:
+            while wordl<n and s[wordl]==' ':
+                wordl+=1
+            # 说明找到单词左边了
+            wordr = wordl
+            while wordr<n and s[wordr]!=' ':
+                wordr +=1
+            # 说明找到单词右边了
+            if wordl<n:
+                lists.append(s[wordl: wordr])
+                wordl = wordr
+        print(lists)
+        for i in lists[::-1]:
+            res = res+i+' '
+        res = res.rstrip()
+        return res
+
+
+
+
+
 
