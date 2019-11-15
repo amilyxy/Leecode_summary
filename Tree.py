@@ -144,6 +144,42 @@ class Solution:
                 stack.append(node.left)
         return out
 
+'''
+102. Binary Tree Level Order Traversal 二叉树的层次遍历
+'''
+# BFS方法
+class Solution:
+    def levelOrder(self, root: TreeNode) -> list[list[int]]:
+        tree, temp, res, treedown = [], [], [], []
+        if root:
+            tree.append(root)
+        while tree:
+            node = tree.pop(0)
+            temp.append(node.val)
+            if node.left:
+                treedown.append(node.left)
+            if node.right:
+                treedown.append(node.right)
+            if not tree:
+                res.append(temp)
+                tree = treedown
+                treedown, temp = [], []
+        return res
+
+# DFS方法
+class Solution:
+    def levelOrder(self, root: TreeNode) -> list[list[int]]:
+        res = []
+        def _DFS(node, depth):
+            if not node: return
+            if len(res) == depth:
+                res.append([])
+            res[depth].append(node.val)
+            _DFS(node.left, depth+1)
+            _DFS(node.right, depth+1)
+        _DFS(root, 0)
+        return res
+
 
 
 

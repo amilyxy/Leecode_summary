@@ -12,12 +12,40 @@
 describe: 给定一个 haystack 字符串和一个 needle 字符串，在haystack字符串中找出needle字符串出现的第一个位置(从0开始)。
           如果不存在，则返回-1。
 '''
+# 题解方法一 暴力滑动搜索
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         for i in range(len(haystack)-len(needle)+1):
             if haystack[i: i+len(needle)] == needle:
                 return i
         return -1
+
+# 11.15 更新 sunday匹配方法（浩波来问的，不然我都不知道~
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        # 计算偏移表
+        dic = {}
+        n = len(needle)
+        n1 = len(haystack)
+        for i in range(n - 1, -1, -1):
+            if needle[i] not in dic:
+                dic[needle[i]] = n - i
+        dic['not'] = n + 1
+
+        indx = 0
+        while (indx + n) <= n1:
+            temp = haystack[indx: indx + n]
+            if temp == needle:
+                return indx
+            else:
+                if (indx + n) < n1:
+                    if haystack[indx + n] in dic:
+                        indx += dic[haystack[indx + n]]
+                    else:
+                        indx += dic['not']
+                else:
+                    return -1
+        return indx if (indx + n) < n1 else -1
 
 '''
 14. Longest Common Prefix: 最长公共前缀
