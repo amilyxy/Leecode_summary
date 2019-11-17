@@ -180,6 +180,120 @@ class Solution:
         _DFS(root, 0)
         return res
 
+'''
+100. same tree 相同的树
+'''
+# 方法一： 如果两个树相等 他们遍历结果必定也是相同的
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        # 采用先序遍历
+        resp = self.traversal(p)
+        resq = self.traversal(q)
+        print(resp)
+        print(resq)
+        if resp == resq:
+            return True
+        else:
+            return False
+
+    def traversal(self, node):
+        res = []
+        if node:
+            res.append(node.val)
+        else:
+            res.append('#')
+            return res
+        res.extend(self.traversal(node.left))
+        res.extend(self.traversal(node.right))
+        return res
+
+# 层次遍历方法也可以做呐
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        # 采用层次遍历
+        a, b = self.helper(p), self.helper(q)
+        if a == b:
+            return True
+        else:
+            return False
+
+    def helper(self, node):
+        temp, res = [], []
+        if node:
+            listnode = [node]
+            while listnode:
+                n = listnode.pop()
+                if n == '#':
+                    res.append('#')
+                else:
+                    res.append(n.val)
+                    temp.append(n.left) if n.left else temp.append('#')
+                    temp.append(n.right) if n.right else temp.append('#')
+                if not listnode:
+                    listnode = temp
+                    temp = []
+        return res
+
+# 题解方法 递归
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        # 采用层次遍历
+        if p and q:
+            if p.val == q.val:
+                return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+            else:
+                return False
+        else:
+            if p or q:
+                return False
+            else:
+                return True
+
+'''
+101 Symmetric Tree 对称二叉树
+'''
+# 突然觉得 用我上面的自己层次遍历 最后判断每一层res是否对称就好了
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if root:
+            listnode = [root]
+            temp, res = [], []
+            while listnode:
+                n = listnode.pop()
+                if n == '#':
+                    res.append('#')
+                else:
+                    res.append(n.val)
+                    temp.append(n.left) if n.left else temp.append('#')
+                    temp.append(n.right) if n.right else temp.append('#')
+                if not listnode:
+                    for i in range(len(res)//2):
+                        if res[i] != res[len(res)-i-1]:
+                            return False
+                    listnode = temp
+                    temp, res = [], []
+        return True
+
+# 递归方法思考
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if root:
+            return self.helper(root.left, root.right)
+        else:
+            return True
+
+    def helper(self, node1, node2):
+        if node1 and node2:
+            if node1.val != node2.val:
+                return False
+            if node1.val == node2.val:
+                return self.helper(node1.left, node2.right) and self.helper(node1.right, node2.left)
+        else:
+            if node1 or node2:
+                return False
+            else:
+                return True
+
 
 
 
