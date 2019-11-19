@@ -180,5 +180,61 @@ class Solution:
         return res
 
     # 好像还可以用掩码的方法
+'''
+39. Combination Sum 组合总和
+'''
+# z只是想把代码发上来看看我有多奇葩 为啥我总是想不到么
+from collections import Counter
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        cand = set(candidates)
+        res1 = []
+        # 从结果出发：
+        def helper(t, res):
+            if sum(res) == target:
+                flag = 0
+                for i in res1:
+                    if len(i) == len(res) and set(i) == set(res) and Counter(i) == Counter(res):
+                        flag = 1
+                        break
+                if not flag:
+                    res1.append(res)
+            if sum(res) < target:
+                for i in range(1, t + 1):
+                    if i in cand:
+                        res2 = res.copy()
+                        res2.append(i)
+                        helper(t - i, res2)
+
+        helper(target, [])
+        return res1
+
+'''
+40. Combination Sum II 组合总和 II
+'''
+# 今天依旧是接近超时的一天 ==
+from collections import Counter
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        sorted(candidates)
+        res = []
+        def helper(t, temp, cand):
+            if sum(temp) == target:
+                flag = 0
+                for j in res:
+                    if len(j) == len(temp) and set(j) == set(temp) and Counter(temp) == Counter(j):
+                        flag = 1
+                        break
+                if not flag:
+                    res.append(temp)
+            if sum(temp) < target:
+                for i in cand:
+                    if i <= t:
+                        cand1 = cand.copy()
+                        cand1.remove(i)
+                        helper(t-i, temp+[i], cand1)
+
+        helper(target, [], candidates)
+        return(res)
 
 

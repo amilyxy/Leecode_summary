@@ -277,16 +277,13 @@ class Solution:
 # 递归方法思考
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
-        if root:
-            return self.helper(root.left, root.right)
-        else:
-            return True
+        return self.helper(root, root)
 
     def helper(self, node1, node2):
         if node1 and node2:
             if node1.val != node2.val:
                 return False
-            if node1.val == node2.val:
+            else:
                 return self.helper(node1.left, node2.right) and self.helper(node1.right, node2.left)
         else:
             if node1 or node2:
