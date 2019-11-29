@@ -183,11 +183,9 @@ class Solution:
 '''
 39. Combination Sum 组合总和
 '''
-# z只是想把代码发上来看看我有多奇葩 为啥我总是想不到么
-from collections import Counter
+# z只是想把代码发上来看看我有多奇葩 在超时的边缘反复试探
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        cand = set(candidates)
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
         res1 = []
         # 从结果出发：
         def helper(t, res):
@@ -199,20 +197,63 @@ class Solution:
                         break
                 if not flag:
                     res1.append(res)
+            # 以上if可替代方法 万事皆有解决方法嘛！
+            '''
+            if sum(temp) == target and sorted(temp) not in res:
+                res.append(sorted(temp))           
+            '''
             if sum(res) < target:
                 for i in range(1, t + 1):
-                    if i in cand:
-                        res2 = res.copy()
-                        res2.append(i)
-                        helper(t - i, res2)
+                    if i in candidates:
+                        helper(t - i, res+[i])
 
         helper(target, [])
         return res1
 
+# 题解方法@powcai 还是觉得有点难理解,写不出来也是真的
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def backtrack(i, tmp_sum, tmp):
+            if  tmp_sum > target or i == n:
+                return
+            if tmp_sum == target:
+                res.append(tmp)
+                return
+            for j in range(i, n):
+                if tmp_sum + candidates[j] > target:
+                    break
+                backtrack(j,tmp_sum + candidates[j],tmp+[candidates[j]])
+        backtrack(0, 0, [])
+        return res
+
+# 动态规划方法 @蠢萌哒小洋  我真的跪了...
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        dict = {}
+        for i in range(1, target + 1):
+            dict[i] = []
+
+        for i in range(1, target + 1):
+            for j in candidates:
+                if i == j:
+                    dict[i].append([i])
+                elif i > j:
+                    for k in dict[i - j]:
+                        x = k[:]
+                        x.append(j)
+                        x.sort()  # 升序，便于后续去重
+                        if x not in dict[i]:
+                            dict[i].append(x)
+
+        return dict[target]
+
 '''
 40. Combination Sum II 组合总和 II
 '''
-# 今天依旧是接近超时的一天 ==
+# 今天依旧是在超时边缘试探的一天 ==
 from collections import Counter
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -236,5 +277,6 @@ class Solution:
 
         helper(target, [], candidates)
         return(res)
+
 
 
