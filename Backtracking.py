@@ -197,7 +197,7 @@ class Solution:
                         break
                 if not flag:
                     res1.append(res)
-            # 以上if可替代方法 万事皆有解决方法嘛！
+            # 以上if可替代方法 万事皆有解决方法嘛！ 对比时间1000ms-520ms
             '''
             if sum(temp) == target and sorted(temp) not in res:
                 res.append(sorted(temp))           
@@ -231,24 +231,56 @@ class Solution:
 
 # 动态规划方法 @蠢萌哒小洋  我真的跪了...
 class Solution:
-    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
-        dict = {}
-        for i in range(1, target + 1):
-            dict[i] = []
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = {}
+        candidates.sort()
+        for i in range(1, target+1):
+            res[i] = []
 
-        for i in range(1, target + 1):
+        for i in range(1, target+1):
             for j in candidates:
                 if i == j:
-                    dict[i].append([i])
-                elif i > j:
-                    for k in dict[i - j]:
-                        x = k[:]
-                        x.append(j)
-                        x.sort()  # 升序，便于后续去重
-                        if x not in dict[i]:
-                            dict[i].append(x)
+                    res[i].append([j])
+                if j<i:
+                    for k in res[i-j]:
+                        x = k[:]+[j]
+                        x.sort()
+                        if x not in res[i]:
+                            res[i].append(x)
+        return res[target]
 
-        return dict[target]
+# 题解方法@麦麦麦麦子
+# 刚开始比较难理解 多看几遍就懂了
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        if target == 0:
+            return [[]]
+        elif target < min(candidates):
+            return []
+        res = []
+        for i in candidates:
+            # 以下过滤器可避免出现排列不同的重复答案且免排序，x>=i和x<=i都行
+            for j in self.combinationSum(list(filter(lambda x: x <= i, candidates)), target - i):
+                res.append([i] + j)
+                print(res)
+        return res
+
+# 题解方法 （这个是我最容易理解的） @liweiwei1419
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def helper(t, ind, temp):
+            if t==0:
+                res.append(temp)
+                return
+            for i in range(ind, n):
+                if t-candidates[i]<0:
+                    break
+                helper(t-candidates[i], i, temp+[candidates[i]])
+        helper(target, 0, [])
+        return res
 
 '''
 40. Combination Sum II 组合总和 II
@@ -277,6 +309,45 @@ class Solution:
 
         helper(target, [], candidates)
         return(res)
+
+# 按照39题解方法 liweiwei的方法适当修改
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def helper(t, ind, temp):
+            if t == 0 and sorted(temp) not in res:
+                res.append(sorted(temp))
+                return
+            for i in range(ind, n):
+                if t-candidates[i]<0:
+                    break
+                helper(t-candidates[i], i+1, temp+[candidates[i]])
+        helper(target, 0, [])
+        return res
+
+# 前一种方法的改进
+class Solution:
+    def combinationSum2(self, candidates: list[int], target: int) -> list[list[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def helper(t, ind, temp):
+            if t == 0:
+                res.append(temp)
+                return
+            for i in range(ind, n):
+                if t-candidates[i]<0:
+                    break
+                if i>ind and candidates[i]==candidates[i-1]:
+                    continue
+                else:
+                    helper(t-candidates[i], i+1, temp+[candidates[i]])
+        helper(target, 0, [])
+        return res
+
+
 
 
 
