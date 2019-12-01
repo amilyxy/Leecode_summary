@@ -157,6 +157,134 @@ class Solution:
                 dp[j] = 0 if obstacleGrid[i][j] else dp[j] + dp[j - 1]
         return dp[-2]
 
+'''
+120 Triangle 三角形最小路径和
+'''
+# 按照惯例 第一个依旧是我的超时方法
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        # 三角形的深度
+        n = len(triangle)
+        res = []
+        def helper(deep, i, tmp):
+            if deep == n:
+                res.append(sum(tmp))
+            else:
+                helper(deep+1, i, tmp+[triangle[deep][i]])
+                helper(deep+1, i+1,tmp+[triangle[deep][i+1]])
+        helper(1, 0, [triangle[0][0]])
+        return min(res)
+
+# 当时有想过自底向上 但仔细想了 @名字太长了不想打
+    def minimumTotal(self, triangle: list[list[int]]) -> int:
+        for i in range(len(triangle)-2, -1, -1):
+            for j in range(len(triangle[i])):
+                triangle[i][j] += min(triangle[i+1][j], triangle[i+1][j+1])
+        return triangle[0][0]
+
+# 自顶向上也是可以做的 @eternalhunter
+class Solution(object):
+    def minimumTotal(self, triangle):
+        if not triangle:
+            return 0
+        if len(triangle) == 1:
+            return triangle[0][0]
+        for i in range(1, len(triangle)):
+            triangle[i][0] += triangle[i-1][0]
+            for j in range(1, len(triangle[i])-1):
+                triangle[i][j] += min(triangle[i-1][j-1], triangle[i-1][j])
+            triangle[i][-1] += triangle[i-1][-1]
+        return min(triangle[-1])
+
+'''
+279 完全平方和
+'''
+# 来看看我妖娆的代码... 其实这个方法在比较大的数值就容易超出时间限制了 不妥不妥
+import math
+class Solution:
+    def numSquares(self, n: int) -> int:
+        # 先用一种笨方法
+        maxpow = math.floor(math.sqrt(n))
+        li = set(map(lambda x: pow(x, 2), range(1,maxpow+1)))
+        newli = set(li)
+        if n in li:
+            return 1
+        k = 1
+        while 1:
+            k+=1
+            temp = set()
+            for i in newli:
+                if i<n:
+                    for j in li:
+                        if i+j == n:
+                            return k
+                        temp.add(i+j)
+            newli = set(temp)
+
+# 好好看看人家的方法 思路和你的一毛一样 时间差的不是一点半点... @powcai
+class Solution:
+    def numSquares(self, n: int) -> int:
+        from collections import deque
+        if n == 0 or n == 1: return n
+        if int(n ** 0.5) ** 2 == n: return 1
+        queue = deque([n])
+        candidates = set([i ** 2 for i in range(1, int(n ** 0.5) + 1)])
+        step = 0
+        while queue:
+            step += 1
+            l = len(queue)
+            for _ in range(l):
+                tmp = queue.pop()
+                for x in candidates:
+                    val = tmp - x
+                    if val in candidates:
+                        return step + 1
+                    elif val > 0:
+                        queue.appendleft(val)
+
+# 根据第二个代码修改了一下第一个代码 速度确实快了很多啊
+class Solution:
+    def numSquares(self, n: int) -> int:
+        # 先用一种笨方法
+        maxpow = math.floor(math.sqrt(n))
+        cand = set(map(lambda x: x**2, range(1,maxpow+1)))
+        if n in cand:
+            return 1
+        k = 0
+        newli = {n}
+        while 1:
+            k+=1
+            temp = set()
+            for i in cand:
+                for j in newli:
+                    a = j-i
+                    if a in cand:
+                        return k+1
+                    temp.add(a)
+            newli = temp
+
+# 拉格朗日四个方形定理 @QQqun902025048
+class Solution:
+    def numSquares(self, n: int) -> int:
+        while n % 4 == 0:
+            n /= 4
+        if n % 8 == 7:
+            return 4
+        a = 0
+        while a ** 2 <= n:
+            b = int((n - a ** 2) ** 0.5)
+            if a ** 2 + b ** 2 == n:
+                return bool(a) + bool(b)
+            a += 1
+        return 3
+
+# 动态规划方法 @QQqun902025048
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [0]
+        for i in range(1, n+1):
+            dp.append(min(dp[-j*j] for j in range(1, 1 + int(i**0.5))) + 1)
+        return dp[-1]
 
 
 
