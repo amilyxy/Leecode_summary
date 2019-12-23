@@ -125,3 +125,47 @@ class Solution:
                 else:
                     r = mid - 1
         return -1
+
+'''
+81.Search in Rotated Sorted ArrayII 搜索旋转数组II 
+'''
+# 代码其实差不多 主要区别在于如何处理nums[l] == nums[mid] == nums[r]的情况
+class Solution:
+    def search(self, nums: List[int], target: int) -> bool:
+        if len(nums) == 0:
+            return False
+        else:
+            l, r = 0, len(nums)-1
+            while l<=r:
+                mid = l+(r-l)//2
+                if nums[mid] == target:
+                    return True
+                if nums[l] == nums[mid] == nums[r]:
+                    l += 1
+                    r -= 1
+                else:
+                    if nums[l]<=nums[mid]:
+                        if nums[l]<=target<=nums[mid]:
+                            r = mid-1
+                        else:
+                            l = mid+1
+                    else:
+                        if nums[mid]<=target<=nums[r]:
+                            l = mid+1
+                        else:
+                            r = mid-1
+        return False
+
+'''
+153. 寻找旋转排序数组中的最小值
+'''
+class Solution:
+    def findMin(self, nums: list[int]) -> int:
+        l, r = 0, len(nums)-1
+        while l!=r:
+            mid = l+(r-l)//2
+            if nums[l]<=nums[mid] and nums[r]<nums[mid]:
+                l=mid+1
+            else:
+                r=mid
+        return nums[l]

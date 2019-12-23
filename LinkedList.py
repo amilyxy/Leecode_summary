@@ -138,3 +138,55 @@ class Solution:
     需要的节点比较少
     https://leetcode-cn.com/problems/swap-nodes-in-pairs/solution/di-gui-2chong-fei-di-gui-by-heng-29/
     '''
+
+'''
+328.Odd Even Linked List 奇偶链表
+'''
+# 根据数学归纳法写了好久...尝试失败... 以下是题解复现python版
+class Solution:
+    def oddEvenList(self, head: ListNode) -> ListNode:
+        if not head:
+            return head
+        evenhead=even=head.next
+        odd = head
+        while even and even.next:  # while odd.next and even.next:
+            odd.next, even.next = odd.next.next, even.next.next
+            odd, even = odd.next, even.next
+        odd.next = evenhead
+        return head
+
+'''
+92. Reverse Linked List II 反转链表
+'''
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+# 感觉是写的有点复杂嗷
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        count = 0
+        begin, beginpre = head, head
+        while begin:
+            count+=1
+            if count == m:
+                end = count
+                pre = begin
+                cur = pre.next
+                while end<n:
+                    temp = cur.next
+                    cur.next = pre
+                    pre = cur
+                    cur = temp
+                    end+=1
+                if count == 1:
+                    head = pre
+                else:
+                    beginpre.next = pre
+                begin.next = cur
+                break
+            else:
+                beginpre = begin
+                begin =begin.next
+        return head
