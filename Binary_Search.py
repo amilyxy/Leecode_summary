@@ -164,7 +164,9 @@ class Solution:
         l, r = 0, len(nums)-1
         while l!=r:
             mid = l+(r-l)//2
-            if nums[l]<=nums[mid] and nums[r]<nums[mid]:
+            # if nums[l]<=nums[mid] and nums[r]<nums[mid]:
+            # 看完题解之后好像只要这一句就好
+            if nums[r]<nums[mid]:
                 l=mid+1
             else:
                 r=mid

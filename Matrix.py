@@ -149,3 +149,25 @@ class Solution:
 
         return matrix
 
+'''
+73. Set Matrix Zeroes 矩阵置零
+'''
+# m+n的来了 好吧 看了一圈好像我写的这个是最复杂的 需要额外的存储空间
+class Solution:
+    def setZeroes(self, matrix: list[list[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        m = len(matrix)
+        n = len(matrix[0])
+        setzeroi = set()
+        setzeroj = set()
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == 0:
+                    setzeroi.add(i)
+                    setzeroj.add(j)
+        for i in range(m):
+            for j in range(n):
+                if i in setzeroi or j in setzeroj:
+                    matrix[i][j] = 0
