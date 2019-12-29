@@ -171,3 +171,79 @@ class Solution:
             for j in range(n):
                 if i in setzeroi or j in setzeroj:
                     matrix[i][j] = 0
+
+# O(1)的作法  @powcai(好强
+class Solution(object):
+    def setZeroes(self, matrix):
+        is_col = False
+        R = len(matrix)
+        C = len(matrix[0])
+        for i in range(R):
+            if matrix[i][0] == 0: is_col = True
+            for j in range(1, C):
+                if matrix[i][j]  == 0:
+                    matrix[0][j] = 0
+                    matrix[i][0] = 0
+
+        for i in range(R-1,-1,-1):
+            for j in range(C-1,0,-1):
+                if not matrix[i][0] or not matrix[0][j]:
+                    matrix[i][j] = 0
+            if is_col: matrix[i][0] = 0
+
+
+'''
+329. Longest Increasing Path in a Matrix 矩阵中的最长递增路径
+'''
+# 写了好久终于写出来了 运行时间有点长 804ms
+# 看到答案有先排序在搜索的方法  确实挺巧妙的 我的方法还可以照这个再改进
+class Solution:
+    def longestIncreasingPath(self, matrix: list[list[int]]) -> int:
+        m = len(matrix)
+        if m == 0:
+            return 0
+        else:
+            n = len(matrix[0])
+        dire = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        maxlen = [[-1 for _ in range(n)] for _ in range(m)]  # 矩阵中每个值都是都是其最长递增路径
+
+        def helper(i, j):
+            temp = [0]
+            for k in dire:
+                newi, newj = i + k[0], j + k[1]
+                if 0 <= newi < m and 0 <= newj < n and matrix[newi][newj] > matrix[i][j]:
+                    if maxlen[newi][newj] != -1:
+                        temp.append(1 + maxlen[newi][newj])
+                    else:
+                        temp.append(1 + helper(newi, newj))
+            maxlen[i][j] = max(temp)
+            return max(temp)
+
+        for i in range(m):
+            for j in range(n):
+                if maxlen[i][j] == -1:
+                    maxlen[i][j] = helper(i, j)
+
+        print(maxlen)
+        return max(max(row) for row in maxlen) + 1
+
+# 评论里面与众不同的一个方法 加了排序步骤
+class Solution(object):
+    def longestIncreasingPath(self, matrix):
+        if not matrix or not matrix[0]:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        lst = []
+        for i in range(m):
+            for j in range(n):
+                lst.append((matrix[i][j], i, j))
+        lst.sort()
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+        for num, i, j in lst:
+            dp[i][j] = 1
+            for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                r, c = i + di, j + dj
+                if 0 <= r < m and 0 <= c < n:
+                    if matrix[i][j] > matrix[r][c]:
+                        dp[i][j] = max(dp[i][j], 1 + dp[r][c])
+        return max([dp[i][j] for i in range(m) for j in range(n)])

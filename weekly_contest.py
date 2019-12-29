@@ -55,3 +55,62 @@ class Solution:
                         return False
                 nums = nums-Counter(cut)
             return True
+
+'''
+5296. 两棵二叉搜索树中的所有元素
+'''
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+        self.res = []
+
+        def helper(node):
+            if node is None:
+                return
+            helper(node.left)
+            self.res.append(node.val)
+            helper(node.right)
+
+        helper(root1)
+        helper(root2)
+        self.res.sort()
+        return self.res
+
+'''
+5297. 跳跃游戏 III
+'''
+from collections import defaultdict
+
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        # 先构建一个下标图
+        dictarr = defaultdict(set)
+        n = len(arr)
+        for i in range(n):
+            val = arr[i]
+            if i - val >= 0:
+                dictarr[i].add((i - val))
+            if i + val < n:
+                dictarr[i].add((i + val))
+                # print(dictarr)
+
+        def dfs(a, marked):
+            if arr[a] == 0:
+                return True
+            for i in dictarr[a]:
+                if i not in marked:
+                    marked.append(i)
+                    if dfs(i, marked): return True
+
+        marked = [start]
+        if dfs(start, marked):
+            return True
+        else:
+            return False

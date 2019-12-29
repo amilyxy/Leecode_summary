@@ -72,8 +72,7 @@ class Solution:
 # 先构建数据图 然后DFS遍历
 # 题外话： 感觉我写的好复杂？？？
 class Solution:
-    def calcEquation(self, equations: list[List[str]], values: list[float], queries: list[list[str]]) -> list[
-        float]:
+    def calcEquation(self, equations: list[List[str]], values: list[float], queries: list[list[str]]) -> list[float]:
         datagraph = {}
         n = len(values)
         # 构建datagraph
