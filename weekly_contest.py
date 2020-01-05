@@ -86,8 +86,6 @@ class Solution:
 5297. 跳跃游戏 III
 '''
 from collections import defaultdict
-
-
 class Solution:
     def canReach(self, arr: List[int], start: int) -> bool:
         # 先构建一个下标图
@@ -114,3 +112,93 @@ class Solution:
             return True
         else:
             return False
+
+'''
+5303. 解码字母到整数映射
+'''
+# 方法1 做题的时候想到的
+class Solution:
+    def freqAlphabets(self, s: str) -> str:
+        flag = 0
+        if s[-1] == '#': flag = 1
+        s = s.split('#')
+        if flag == 1: s = s[:-1]
+        res = []
+        lens = len(s)
+        for i in range(lens):
+            end = len(s[i])-2
+            if i == (lens-1) and not flag:
+                end = len(s[i])
+            for j in s[i][:end]:
+                res.append(chr(int(j)+96))
+            if s[i][end:]:
+                res.append(chr(int(s[i][end:])+96))
+        return ''.join(res)
+
+# 后面想到的 算是双指针吧
+class Solution:
+    def freqAlphabets(self, s: str) -> str:
+        res = []
+        lens = len(s)
+        i = 0
+        while i<len(s):
+            if i+2<lens and s[i+2] == '#':
+                res.append(chr(int(s[i:i+2])+96))
+                i += 2
+            else:
+                res.append(chr(int(s[i])+96))
+            i += 1
+        return ''.join(res)
+
+'''
+5304. 子数组异或查询
+'''
+class Solution:
+    def xorQueries(self, arr: List[int], queries: List[List[int]]) -> List[int]:
+        res = []
+        xorarr = [0, arr[0]]
+        for i in arr[1:]:
+            xorarr.append(xorarr[-1] ^ i)
+        for i in queries:
+            res.append(xorarr[i[0]] ^ xorarr[i[1] + 1])
+        return res
+
+'''
+5305. 获取你好友已观看的视频
+'''
+class Solution:
+    def watchedVideosByFriends(self, watchedVideos: List[List[str]], friends: List[List[int]], id: int, level: int) -> List[str]:
+        lev = 0
+        has_focus, now_focus = {id}, {id}
+        while lev<level:
+            temp = []
+            for i in now_focus:
+                temp.extend(friends[i])
+            now_focus = set(temp)
+            if lev != level-1:
+                has_focus = has_focus|now_focus
+            else:
+                now_focus = now_focus - has_focus
+            lev += 1
+        dic = {}
+        for i in now_focus:
+            for j in watchedVideos[i]:
+                dic[j] = dic.setdefault(j, 0)+1
+        dic = sorted(dic.items(), key=lambda x:(x[1], x[0]))
+        res = [i[0] for i in dic]
+        return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
