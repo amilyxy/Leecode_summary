@@ -8,7 +8,7 @@
 -------------------------------------------------
 """
 '''
-5292: 划分数组为连续数字集合
+1295: 划分数组为连续数字集合
 '''
 # 老样子 第一个还是超时程序 在36个案例时超时
 class Solution:
@@ -57,7 +57,7 @@ class Solution:
             return True
 
 '''
-5296. 两棵二叉搜索树中的所有元素
+1305. 两棵二叉搜索树中的所有元素
 '''
 # Definition for a binary tree node.
 class TreeNode:
@@ -83,7 +83,7 @@ class Solution:
         return self.res
 
 '''
-5297. 跳跃游戏 III
+1306. 跳跃游戏 III
 '''
 from collections import defaultdict
 class Solution:
@@ -114,7 +114,7 @@ class Solution:
             return False
 
 '''
-5303. 解码字母到整数映射
+1309. 解码字母到整数映射
 '''
 # 方法1 做题的时候想到的
 class Solution:
@@ -151,7 +151,7 @@ class Solution:
         return ''.join(res)
 
 '''
-5304. 子数组异或查询
+1310. 子数组异或查询
 '''
 class Solution:
     def xorQueries(self, arr: List[int], queries: List[List[int]]) -> List[int]:
@@ -164,7 +164,7 @@ class Solution:
         return res
 
 '''
-5305. 获取你好友已观看的视频
+1311. 获取你好友已观看的视频
 '''
 class Solution:
     def watchedVideosByFriends(self, watchedVideos: List[List[str]], friends: List[List[int]], id: int, level: int) -> List[str]:

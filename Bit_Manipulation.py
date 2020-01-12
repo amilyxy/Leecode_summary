@@ -107,4 +107,56 @@ class Solution:
         return max([0] + [max_len[x] * max_len[y] for x in max_len for y in max_len if x & y == 0])
 
 
+'''
+201.数字范围按位与
+'''
+# 移位操作
+class Solution:
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:
+        i = 0
+        while m != n:
+            m >>= 1
+            n >>= 1
+            i += 1
+        return m << i
+
+# 方法二：
+class Solution:
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:
+        while n > m:  # 直到m大于等于n
+            n &= (n-1)
+        return n
+
+'''
+89.格雷编码  
+'''
+# 根据格雷码的生成公式
+class Solution:
+    def grayCode(self, n: int) -> List[int]:
+        n = pow(2,n)
+        res = []
+        for i in range(n):
+            # res.append(i^(int(i/2)))
+            res.append(i^(i>>1))
+        return res
+
+# 根据格雷码的镜像排列规则 @jyd
+class Solution:
+    def grayCode(self, n: int) -> List[int]:
+        res, head = [0], 1
+        for i in range(n):
+            for j in range(len(res) - 1, -1, -1):
+                res.append(head + res[j])
+            head <<= 1
+        return res
+
+# 镜像排列的另一种实现 @powcai
+# 都是大佬哈！我的位运算还不够熟练
+class Solution:
+    def grayCode(self, n: int) -> List[int]:
+        res = [0]
+        for i in range(n):
+            for j in range(len(res) - 1, -1, -1):
+                res.append(res[j] ^ (1 << i))
+        return res
 

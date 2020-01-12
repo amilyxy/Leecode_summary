@@ -218,3 +218,55 @@ class Solution:
             # print(s)
             s1 = s
         return 0
+
+'''
+51. N-Queens N皇后
+'''
+# 回溯法 简洁代码 @liweiwei1419
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        # col, mdiagonal, sdiagonal记录攻击位置
+        res = []
+
+        def dfs(row, col, mdiagonal, sdiagonal, cur_res):
+            if row == n:
+                res.append(["." * cur + "Q" + "." * (n - cur - 1) for cur in cur_res])
+                return
+
+            for i in range(n):
+                if (i not in col) and (i + row not in mdiagonal) and (i - row not in sdiagonal):
+                    dfs(row + 1, col | {i}, mdiagonal | {i + row}, sdiagonal | {i - row}, cur_res + [i])
+
+        dfs(0, set(), set(), set(), [])
+        return res
+
+'''
+52. N皇后II  
+'''
+# 其实就是51题啦
+class Solution:
+    def totalNQueens(self, n: int) -> int:
+        global resnum
+        resnum = 0
+        def dfs(col, row, mdiagonal, sdiagonal):
+            if col == n:
+                global resnum
+                resnum += 1
+                return
+            for i in range(n):
+                if i not in row and col+i not in mdiagonal and col-i not in sdiagonal:
+                    dfs(col+1, row|{i}, mdiagonal|{col+i}, sdiagonal|{col-i})
+
+        dfs(0, set(), set(), set())
+        return resnum
+
+
+
+
+
+
+
+
+
+
+
