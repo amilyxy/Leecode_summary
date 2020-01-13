@@ -188,6 +188,118 @@ class Solution:
         res = [i[0] for i in dic]
         return res
 
+# 第171次周赛
+'''
+5307. 将整数转换为两个无零整数的和
+'''
+# 当然也可以通过 %10?=0 来判断是否有0，我觉得我是投机取巧了..
+class Solution:
+    def getNoZeroIntegers(self, n: int) -> List[int]:
+        for i in range(1, (n + 1) // 2 + 1):
+            if '0' not in str(i):
+                j = n - i
+                if '0' not in str(j):
+                    return [i, j]
+
+
+'''
+5308. 或运算的最小翻转次数
+'''
+import itertools
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        a = bin(a)[2:][::-1]
+        b = bin(b)[2:][::-1]
+        c = bin(c)[2:][::-1]
+        temp = list(itertools.zip_longest(a, b, c, fillvalue='0'))
+        # print(list(temp))
+        res = 0
+        for i in temp:
+            if i[2] == '1' and '1' not in i[:2]:
+                res += 1
+            if i[2] == '0' and '1' in i[:2]:
+                if '0' in i[:2]:
+                    res += 1
+                else:
+                    res += 2
+        return res
+
+'''
+5309. 连通网络的操作次数
+'''
+# DFS方法  564ms
+from collections import defaultdict
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        # 线缆总数
+        num = len(connections)
+        # 构建图
+        graph = defaultdict(list)
+        for i in connections:
+            graph[i[0]].append(i[1])
+            graph[i[1]].append(i[0])
+
+        marked = set()
+        # 求连通块数
+        cnum = 0
+        for i in graph.keys():
+            if i not in marked:
+                self.dfs(marked, i, graph)
+                cnum += 1
+
+        if len(connections) - (len(graph) - 1) < (n - len(marked)):
+            return -1
+        else:
+            return cnum - 1 + (n - len(marked))
+
+    def dfs(self, marked, node, graph):
+        marked.add(node)
+        for j in graph[node]:
+            if j not in marked:
+                self.dfs(marked, j, graph)
+
+# Quick-find 方法在n=10000 第32个测试用例超时
+from collections import defaultdict
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+       # 设置查集
+        dic = {}
+        for i in range(n):
+            dic[i] = i
+        for i in connections:
+            if dic[i[0]]!=dic[i[1]]:
+                temp = dic[i[0]]
+                for j in range(n):
+                    if dic[j] == temp:
+                        dic[j] = dic[i[1]]
+        print(dic)
+        if len(connections)< n-1:
+            return -1
+        else:
+            return len(set(dic.values()))-1
+
+# Quick-union 方法1508ms
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        tree = [i for i in range(n)]
+        count = n
+
+        def findroot(node):
+            while node != tree[node]:
+                node = tree[node]
+            return node
+
+        for i in connections:
+            rootl = findroot(i[0])
+            rootr = findroot(i[1])
+            if rootl != rootr:
+                tree[rootl] = rootr
+                count -= 1
+
+        if len(connections) < n - 1:
+            return -1
+        else:
+            return count - 1
 
 
 
