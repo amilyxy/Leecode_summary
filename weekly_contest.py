@@ -278,7 +278,7 @@ class Solution:
         else:
             return len(set(dic.values()))-1
 
-# Quick-union 方法1508ms
+# Quick-union 方法1252ms
 class Solution:
     def makeConnected(self, n: int, connections: List[List[int]]) -> int:
         tree = [i for i in range(n)]
@@ -300,6 +300,35 @@ class Solution:
             return -1
         else:
             return count - 1
+
+# weight quick union 988ms  感觉也没比quick-union快啊...
+from collections import defaultdict
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        tree = [i for i in range(n)]
+        size = [1 for _ in range(n)]
+        count = n
+        def findroot(node):
+            while node != tree[node]:
+                node = tree[node]
+            return node
+
+        for i in connections:
+            rootl = findroot(i[0])
+            rootr = findroot(i[1])
+            if rootl != rootr:
+                if size[rootl]<size[rootr]:
+                    tree[rootl] = rootr
+                    size[rootl]+=size[rootr]
+                else:
+                    tree[rootr] = rootl
+                    size[rootr] += size[rootl]
+                count -= 1
+        # print(tree)
+        if len(connections)< n-1:
+            return -1
+        else:
+            return count-1
 
 
 
