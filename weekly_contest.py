@@ -448,7 +448,7 @@ class Solution:
             if not node:
                 return None
             node.left = dfs(node.left)
-            node.、right = dfs(node.right)、
+            node.right = dfs(node.right)
             if not node.left and not node.right and node.val == target:
                 return None
             else:
