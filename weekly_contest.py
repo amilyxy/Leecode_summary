@@ -330,6 +330,133 @@ class Solution:
         else:
             return count-1
 
+# @tuotuoli  大神的做法，膜拜一下
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        if len(connections) < n - 1:
+            return -1
+        p = [[i] for i in range(n)]
+        for x, y in connections:
+            if p[x] is not p[y]:
+                if len(p[x]) < len(p[y]):
+                    x, y = y, x
+                p[x].extend(p[y])
+                for z in p[y]:
+                    p[z] = p[x]
+        return len({*map(id, p)}) - 1
+
+'''
+5315. 6和9组成的最大数字
+'''
+# 纯数学解决方法
+class Solution:
+    def maximum69Number(self, num: int) -> int:
+        n = len(str(num))
+        res = 0
+        for i in range(n, -1, -1):
+            temp = num // (10 ** i)
+            num = num % (10 ** i)
+            if temp == 6:
+                res = res * 10 + 9
+                res = res * (10 ** i) + num
+                break
+            else:
+                res = res * 10 + temp
+        return res
+
+# str+内置函数：
+class Solution:
+    def maximum69Number (self, num: int) -> int:
+        # 将str中
+        return int(str(num).replace('6','9',1))
+
+# 纯str：
+class Solution:
+    def maximum69Number (self, num: int) -> int:
+        num = list(str(num))
+        for i in range(len(num)):
+            if num[i] == '6':
+                num[i] = '9'
+                break
+        return ''.join(num)
+
+'''
+5316.竖直打印的单词
+'''
+class Solution:
+    def printVertically(self, s: str) -> List[str]:
+        s_zipped = list(itertools.zip_longest(*s.split(' '), fillvalue=' '))
+        return [''.join(i).rstrip() for i in s_zipped]
+
+'''
+5317.删除给定的叶子节点
+'''
+# 我还是那个我。写代码最长的我。最耗时的我。
+class Solution:
+    def removeLeafNodes(self, root: TreeNode, target: int) -> TreeNode:
+        self.flag = 1
+        new = TreeNode('#')
+        new.left = root
+        print(new)
+
+        def helper(father, node, dire):
+            if node.left == None and node.right == None and node.val == target:
+                self.flag = 1
+                if dire == 'left':
+                    father.left = None
+                if dire == 'right':
+                    father.right = None
+            if node.left != None:
+                helper(node, node.left, 'left')
+            if node.right != None:
+                helper(node, node.right, 'right')
+
+        while self.flag:
+            self.flag = 0
+            if new.left != None:
+                helper(new, new.left, 'left')
+            else:
+                break
+
+        return new.left
+
+# 土旺大佬的做法 单次遍历就好
+class Solution:
+    def removeLeafNodes(self, root: TreeNode, target: int) -> TreeNode:
+        def helper(node):
+            if not node:
+                return True
+            if helper(node.left):
+                node.left = None
+            if helper(node.right):
+                node.right = None
+            if not node.left and not node.right and node.val==target:
+                return True
+            else:
+                return False
+
+        temp = helper(root)
+        if temp:
+            return None
+        else:
+            return root
+
+# 土旺大佬修改之后的  想想还是觉得自己写的好辣鸡啊
+class Solution:
+    def removeLeafNodes(self, root: TreeNode, target: int) -> TreeNode:
+        def dfs(node):
+            if not node:
+                return None
+            node.left = dfs(node.left)
+            node.、right = dfs(node.right)、
+            if not node.left and not node.right and node.val == target:
+                return None
+            else:
+                return node
+        return dfs(root)
+
+
+
 
 
 

@@ -162,8 +162,6 @@ class MyStack:
 # 方法三： 不需要两个queue，这个有点绕，需要理解
 # 用deque()模拟stack实现，只能使用append()和popleft()
 from collections import deque
-
-
 class MyStack:
     # deque()模拟
     def __init__(self):

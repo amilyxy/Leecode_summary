@@ -173,6 +173,52 @@ class Solution:
         return indegree
 
 
+'''
+149. 直线上最多的点数
+'''
+# @powcai
+from collections import Counter, defaultdict
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        points_dict = Counter(tuple(point) for point in points)
+        no_repeat_point = list(points_dict.keys())
+        n = len(no_repeat_point)
+        if n == 1: return points_dict[no_repeat_point[0]]
+        res = 0
+
+        # 最大公约数的模板函数
+        def gcd(a,b):
+            if b!=0:
+                return gcd(b,a%b)
+            else:
+                return a
+
+        for i in range(1, n):
+            x1, y1 = no_repeat_point[i][0], no_repeat_point[i][1]
+            slope = defaultdict(int)
+            for j in range(i):
+                dy = y1-no_repeat_point[j][1]
+                dx = x1-no_repeat_point[j][0]
+                # 求斜率k
+                '''
+                if dx == 0:
+                    tmp = '#'
+                else:
+                    tmp = dy/dx
+                    # tmp = dy*1000/dx*1000 为了避免float的精度问题
+                slope[tmp] += points_dict[no_repeat_point[j]]
+                '''
+                # 求最大公约数
+                g = gcd(dy, dx)
+                if g!=0:
+                    dy //=g
+                    dx //=g
+                slope["{}/{}".format(dy, dx)] += points_dict[no_repeat_point[j]]
+
+            res = max(res, max(slope.values()) + points_dict[no_repeat_point[i]])
+        return res
+
+
 
 
 
