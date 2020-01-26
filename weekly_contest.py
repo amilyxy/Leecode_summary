@@ -455,10 +455,52 @@ class Solution:
                 return node
         return dfs(root)
 
+###173场周赛
+'''
+5319.删除回文子序列
+'''
+#  我还是不懂怎么做？？？莫名其妙
+class Solution:
+    def removePalindromeSub(self, s: str) -> int:
+        if s=="":
+            return 0
+        if s==s[::-1]:
+            return 1
+        else:
+            return 2
 
+'''
+5320.餐厅过滤器 
+'''
+# 方法一 最开始写的
+class Solution:
+    def filterRestaurants(self, restaurants: List[List[int]], veganFriendly: int, maxPrice: int, maxDistance: int) -> List[int]:
+        rest_unzip = list(zip(*restaurants))
+        m = len(rest_unzip[0])
+        res = [0 for _ in range(m)]
+        match = [veganFriendly, maxPrice, maxDistance]
+        for i in range(2, 5):
+            if i == 2:
+                for j in range(m):
+                    if rest_unzip[i][j] >= match[i-2]:
+                        res[j] = 1
+            else:
+                for j in range(m):
+                    if res[j] == 1 and rest_unzip[i][j] > match[i-2]:
+                        res[j] = 0
+        restaurants_1 = [restaurants[i] for i in range(len(res)) if res[i] == 1]
+        restaurants_1 = sorted(restaurants_1, key = lambda x:(x[1], x[0]), reverse=True)
+        return [i[0] for i in restaurants_1]
 
-
-
+# 简化方法
+class Solution:
+    def filterRestaurants(self, restaurants: List[List[int]], veganFriendly: int, maxPrice: int, maxDistance: int) -> List[int]:
+        res = []
+        for i in restaurants:
+            if i[2] >= veganFriendly and i[3]<=maxPrice and i[4]<=maxDistance:
+                res.append(i)
+        res.sort(key=lambda x: (-x[1], -x[0]))
+        return [i[0] for i in res]
 
 
 
