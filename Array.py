@@ -126,6 +126,7 @@ class Solution:
 
 '''
 189. Rotate Array 旋转数组
+注意是原地算法
 '''
 class Solution:
     def rotate(self, nums: list[int], k: int) -> None:

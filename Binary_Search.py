@@ -162,12 +162,29 @@ class Solution:
 class Solution:
     def findMin(self, nums: list[int]) -> int:
         l, r = 0, len(nums)-1
-        while l!=r:
+        while l<r:  # l!=r
             mid = l+(r-l)//2
-            # if nums[l]<=nums[mid] and nums[r]<nums[mid]:
+            # if nums[l]<=nums[mid] and nums[r]<nums[mid]:  这句[2,1,0]示例通不过
             # 看完题解之后好像只要这一句就好
             if nums[r]<nums[mid]:
                 l=mid+1
             else:
                 r=mid
+        return nums[l]
+
+'''
+154. 寻找旋转排序数组中的最小值II
+其实跟81题又差不多...
+'''
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums)-1
+        while l<r:
+            mid = l+(r-l)//2
+            if nums[mid] == nums[l] == nums[r]:
+                l, r = l+1, r-1
+            elif nums[r]<nums[mid]:
+                l = mid+1
+            else:
+                r = mid
         return nums[l]
