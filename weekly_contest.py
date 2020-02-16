@@ -346,6 +346,7 @@ class Solution:
         return len({*map(id, p)}) - 1
 
 '''
+172次周赛
 5315. 6和9组成的最大数字
 '''
 # 纯数学解决方法
@@ -381,6 +382,7 @@ class Solution:
         return ''.join(num)
 
 '''
+172次周赛
 5316.竖直打印的单词
 '''
 class Solution:
@@ -389,6 +391,7 @@ class Solution:
         return [''.join(i).rstrip() for i in s_zipped]
 
 '''
+172次周赛
 5317.删除给定的叶子节点
 '''
 # 我还是那个我。写代码最长的我。最耗时的我。
@@ -455,8 +458,43 @@ class Solution:
                 return node
         return dfs(root)
 
+'''
+172次周赛
+灌溉花园的最小水龙头数目
+'''
+# 贪心做法
+class Solution:
+    def minTaps(self, n: int, ranges: List[int]) -> int:
+        count = 0
+        res = 0
+        for i in range(n+1):
+            ranges[i] = [max(0, i-ranges[i]), min(n, i+ranges[i])]
+        ranges = sorted(ranges, key = lambda x:x[0])
+        i = 0
+        while i<=n:
+            if res>=n:
+                return count
+            tmp = res
+            for j in range(i, n+1):
+                if ranges[j][0]<=res:
+                    if ranges[j][1]>tmp:
+                        tmp = ranges[j][1]
+                else:
+                    break
+            if tmp == res:
+                return -1
+            else:
+                res = tmp
+                count+=1
+                i = j
+
+        if res>=n:
+            return count
+        return -1
+
 ###173场周赛
 '''
+173场周赛
 5319.删除回文子序列
 '''
 #  我还是不懂怎么做？？？莫名其妙
@@ -470,6 +508,7 @@ class Solution:
             return 2
 
 '''
+173场周赛
 5320.餐厅过滤器 
 '''
 # 方法一 最开始写的
@@ -502,6 +541,293 @@ class Solution:
         res.sort(key=lambda x: (-x[1], -x[0]))
         return [i[0] for i in res]
 
+'''
+174次周赛
+5328.方阵中战斗力最弱的k行（题目看起来很容易，其实好弱鸡啊...
+'''
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        res = {}
+        m = len(mat)
+        for i in range(m):
+            tmp = 0
+            for j in mat[i]:
+                if j == 0:
+                    break
+                tmp+=1
+            res[i] = tmp
+
+        res = sorted(res.items(), key=lambda x: (x[1], x[0]))
+        return [i[0] for i in res[:k]]
+
+'''
+174次周赛
+5329.数组大小减半
+'''
+class Solution:
+    def minSetSize(self, arr: List[int]) -> int:
+        dicarr = {}
+        #虽然题目强调了数组长度为偶数
+        n = (len(arr)+1)//2
+        for i in arr:
+            dicarr[i] = dicarr.get(i, 0)+1
+        tmp, count = 0, 0
+        dicarr = sorted(dicarr.items(), key=lambda x: -x[1])
+        for i in dicarr:
+            tmp += i[1]
+            count+=1
+            if tmp>=n:
+                return count
+
+'''
+174次周赛
+5330.分裂二叉树的最大乘积
+'''
+class Solution:
+    def maxProduct(self, root: TreeNode) -> int:
+        res = []
+
+        def product(node):
+            if not node:
+                return 0
+            left = product(node.left)
+            right = product(node.right)
+            cur = left + right + node.val
+            res.append(cur * (alln - cur))
+            return left + right + node.val
+
+        def postorder(node):
+            if node is None:
+                return
+            postorder(node.left)
+            postorder(node.right)
+            order.append(node.val)
+
+        order = []
+        postorder(root)
+        alln = sum(order)
+        product(root)
+        return max(res) % (10 ** 9 + 7)
+
+'''
+174次周赛
+跳跃游戏V
+结合网易2020春招面试题食用更佳哦~
+'''
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        n = len(arr)
+        res = [1 for _ in range(n)]
+        tmp = [[arr[i], i] for i in range(n)]
+        tmp = sorted(tmp, key = lambda x:x[0])
+        print(tmp)
+        for a, b in tmp:
+            # a, b = tmp[i][0], tmp[i][1]
+            cur = 1
+            for j in range(b+1, min(b+d+1,n), 1):
+                # 右边跳
+                if arr[j]<a:
+                    cur = max(res[j]+1, cur)
+                else:
+                    break
+            for j in range(b-1, max(0, b-d)-1, -1):
+                if arr[j]<a:
+                    cur = max(res[j]+1, cur)
+                else:
+                    break
+            res[b] = cur
+        # print(res)
+        return max(res)
+
+'''
+175次周赛
+1346.检查整数及其二倍数是否存在
+'''
+class Solution:
+    def checkIfExist(self, arr: List[int]) -> bool:
+        tmp = arr.count(0)
+        if tmp >=2:
+            return True
+        arr = set(arr)
+        for i in arr:
+            if 2*i in arr and i!=0:
+                return True
+        return False
+
+'''
+175次周赛
+1347.制造字母异位词的最小步骤数
+'''
+from collections import Counter
+class Solution:
+    def minSteps(self, s: str, t: str) -> int:
+        s = Counter(s)
+        t = Counter(t)
+        if s == t:
+            return 0
+        else:
+            return sum((t-s).values())
+
+'''
+175次周赛 
+1348.推文计数
+'''
+from collections import defaultdict
+
+
+class TweetCounts:
+
+    def __init__(self):
+        self.member = defaultdict(list)
+
+    def recordTweet(self, tweetName: str, time: int) -> None:
+        self.member[tweetName].append(time)
+
+    def getTweetCountsPerFrequency(self, freq: str, tweetName: str, startTime: int, endTime: int) -> List[int]:
+        res = []
+        delta = 60
+        if freq == "hour":
+            delta = 60 * delta
+        if freq == "day":
+            delta = 24 * 60 * delta
+        resdic = {}
+
+        for i in self.member[tweetName]:
+            if (i - startTime) >= 0 and i <= endTime:
+                tmp = (i - startTime) // delta
+                resdic[tmp] = resdic.setdefault(tmp, 0) + 1
+        # resdic = sorted(resdic.items(), key = lambda x: x[0])
+        for i in range((endTime - startTime) // delta + 1):
+            if i in resdic:
+                res.append(resdic[i])
+            else:
+                res.append(0)
+        return res
+
+'''
+176次周赛
+5340.统计有序矩阵中的负数  
+从右上角开始找O(m+n)  类似于剑指offer中 查找矩阵中对应的数 
+'''
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        res = 0
+        if not grid: return res
+        m = len(grid)
+        n = len(grid[0])
+        i, j = 0, n-1
+        while i<m and j>-1:
+            if grid[i][j]<0:
+                res+=(m-i)
+                j -= 1
+            else:
+                i += 1
+        return res
+
+'''
+176次周赛
+5341.最后k个数的乘积
+最开始的方法：①记录最后一个0的位置 ②维护前缀积 get的时候只需要查询
+'''
+class ProductOfNumbers:
+    def __init__(self):
+        self.li = [1]
+
+    def add(self, num: int) -> None:
+        if num != 0:
+            self.li.append(self.li[-1]*num)
+        else:
+            self.li = [1]
+        # print(self.li)
+
+    def getProduct(self, k: int) -> int:
+        if k >= len(self.li):
+            return 0
+        else:
+            return self.li[-1]//self.li[-k-1]
+
+'''
+176场周赛
+5342. 最多可以参加的会议数目
+'''
+class Solution:
+    def maxEvents(self, events: List[List[int]]) -> int:
+        events = sorted(events, key=lambda x: (x[1],x[0]))
+        marked = set()
+        for i in events:
+            for j in range(i[0], i[1]+1):
+                if j not in marked:
+                    marked.add(j)
+                    break
+        return len(marked)
+
+# heapq优先队列解法 @yyancy-2
+import heapq
+class Solution:
+    def maxEvents(self, events: List[List[int]]) -> int:
+        ans = 0
+        end = list()
+        events = sorted(events,reverse=True)
+        for i in range(1,100010,1):
+            while events and events[-1][0] == i:
+                heapq.heappush(end, events.pop()[1])
+            while end and end[0] < i:
+                heapq.heappop(end)
+            if end:
+                heapq.heappop(end)
+                ans += 1
+        return ans
+
+'''
+176场周赛
+5343.多次求和构建目标数组
+'''
+# 暴力解法还真的能过 我佛了呀
+class Solution:
+    def isPossible(self, target: List[int]) -> bool:
+        while True:
+            maxnum = max(target)
+            if maxnum == 1:
+                return True
+            idx = target.index(maxnum)
+            tmp = 2*maxnum - sum(target)
+            if tmp<1:
+                return False
+            target[idx] = tmp
+
+# heapq
+class Solution:
+    def isPossible(self, target: List[int]) -> bool:
+        target = list(map(lambda x: -x, target))
+        heapq.heapify(target)
+        while True:
+            maxnum = -heapq.heappop(target)
+            if maxnum == 1:
+                return True
+            tmp = maxnum+sum(target)
+            if tmp<1:
+                return False
+            heapq.heappush(target, -tmp)
+
+# 针对[10000000, 1]的情况
+import heapq, math
+class Solution:
+    def isPossible(self, target: List[int]) -> bool:
+        target = list(map(lambda x: -x, target))
+        heapq.heapify(target)
+        while True:
+            # 最大值
+            maxn = -heapq.heappop(target)
+            # 次大值
+            mmaxn = -heapq.nsmallest(1, target)[0]
+            if maxn == 1:
+                return True
+            n = math.ceil((maxn-mmaxn)/(-sum(target)))
+            if n == 0: n=1
+            tmp = maxn+n*sum(target)
+            if tmp<1:
+                return False
+            heapq.heappush(target, -tmp)
 
 
 

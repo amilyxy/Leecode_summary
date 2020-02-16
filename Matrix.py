@@ -108,6 +108,32 @@ class Solution:
             print(matrix)
         return res
 
+# 最近做剑指offer发现的新的做法 标记数组
+# 只是我觉得最一目了然的做法
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # 标记做法
+        res = []
+        dire = [[0, 1], [1, 0], [0, -1], [-1, 0]]  #方向右下左上
+        m = len(matrix)
+        if m:
+            n = len(matrix[0])
+        else:
+            return matrix
+        marked = [[0 for _ in range(n)] for _ in range(m)]
+        i, j, k= 0, 0, 0
+        while 0<=i<m and 0<=j<n and not marked[i][j]:
+            res.append(matrix[i][j])
+            marked[i][j] = 1
+            while 0<= i+dire[k][0] <m and 0<=j+dire[k][1]<n and not marked[i+dire[k][0]][j+dire[k][1]]:
+                i+=dire[k][0]
+                j+=dire[k][1]
+                res.append(matrix[i][j])
+                marked[i][j] = 1
+            k = (k+1)%4
+            i = i+dire[k][0]
+            j = j+dire[k][1]
+        return res
 
 '''
 59. Spiral Matrix: 螺旋矩阵II
@@ -148,6 +174,24 @@ class Solution:
                 return matrix
 
         return matrix
+# 方法二
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        dire = [[0, 1], [1, 0], [0, -1], [-1, 0]]  #方向右下左上
+        marked = [[0 for _ in range(n)] for _ in range(n)]
+        i, j, k, count = 0, 0, 0, 1
+        while 0<=i<n and 0<=j<n and not marked[i][j]:
+            marked[i][j] = count
+            count += 1
+            while 0<= i+dire[k][0] <n and 0<=j+dire[k][1]<n and not marked[i+dire[k][0]][j+dire[k][1]]:
+                i+=dire[k][0]
+                j+=dire[k][1]
+                marked[i][j] = count
+                count += 1
+            k = (k+1)%4
+            i = i+dire[k][0]
+            j = j+dire[k][1]
+        return marked
 
 '''
 73. Set Matrix Zeroes 矩阵置零

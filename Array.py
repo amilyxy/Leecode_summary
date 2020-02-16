@@ -226,7 +226,64 @@ class Solution:
 
 # 题解方法
 # 好像题解方法也大同小异  没啥好写了
+'''
+315.计算右侧小于当前元素的个数
+逆序对的应用
+'''
+# 归并排序方法 这个时间好像短一点
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        if len(nums)<=1:
+            return nums
+        mid = (len(nums)+1)//2
+        sub1 = self.sortArray(nums[:mid])
+        sub2 = self.sortArray(nums[mid:])
+        l, r = 0, 0
+        tmp = []
+        while l<len(sub1) or r<len(sub2):
+            if r == len(sub2) or l<len(sub1) and sub1[l]<=sub2[r]:
+                tmp.append(sub1[l])
+                l+=1
+            else:
+                tmp.append(sub2[r])
+                r+=1
+        return tmp
 
+# 二叉搜索树的做法
+class Node():
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.leftsum = 0
+        # 记录重复数字个数
+        self.dup = 0
+
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        def insert(node, val):
+            sumnode = 0
+            while node.val != val:
+                if node.val > val:
+                    if not node.left:
+                        node.left = Node(val)
+                    node.leftsum += 1
+                    node = node.left
+                else:
+                    # 如果没有重复数字 可以将node.dup直接改为1
+                    sumnode += node.leftsum+node.dup
+                    if not node.right:
+                        node.right = Node(val)
+                    node = node.right
+            node.dup+=1
+            return sumnode+node.leftsum
+
+        if not nums: return []
+        res = [0]*len(nums)
+        root = Node(nums[-1])
+        for i in range(len(nums)-1, -1, -1):
+            res[i] = insert(root, nums[i])
+        return res
 
 
 

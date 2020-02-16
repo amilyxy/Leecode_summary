@@ -190,3 +190,144 @@ class Solution:
                 beginpre = begin
                 begin =begin.next
         return head
+
+'''
+21.合并两个有序链表  
+'''
+# 方法一 递归
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if l1 and l2:
+            if l1.val > l2.val: l1, l2 = l2, l1
+            l1.next = self.mergeTwoLists(l1.next, l2)
+        return l1 or l2
+
+# 方法二 迭代
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        preHead = ListNode(-1)
+        prev = preHead
+        while l1 and l2:
+            if l1.val<l2.val:
+                prev.next = l1
+                l1 = l1.next
+            else:
+                prev.next = l2
+                l2 = l2.next
+            prev = prev.next
+        prev.next = l1 or l2
+        return preHead.next
+
+'''
+23.合并k个排序链表
+'''
+# 方法一 根据21题分而治之 5683ms 超级耗时
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if lists:
+            prenode = lists[0]
+        else:
+            return
+
+        def helper(node1, node2):
+            prenode = ListNode(-1)
+            prev = prenode
+            while node1 and node2:
+                if node1.val < node2.val:
+                    prev.next = node1
+                    node1 = node1.next
+                else:
+                    prev.next = node2
+                    node2 = node2.next
+                prev = prev.next
+            prev.next = node1 or node2
+            return prenode.next
+
+        for i in range(1, len(lists)):
+            prenode = helper(prenode, lists[i])
+
+        return prenode
+
+# 方法二 利用headq 题解方法@powcai
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        import heapq
+        dummy = ListNode(0)
+        p = dummy
+        head = []
+        for i in range(len(lists)):
+            if lists[i] :
+                heapq.heappush(head, (lists[i].val, i))
+                lists[i] = lists[i].next
+        while head:
+            val, idx = heapq.heappop(head)
+            p.next = ListNode(val)
+            p = p.next
+            if lists[idx]:
+                heapq.heappush(head, (lists[idx].val, idx))
+                lists[idx] = lists[idx].next
+        return dummy.next
+
+# 官方题解有另一种暴力解法，list存储所有的val，然后重新构建链表，不是原地操作
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        self.nodes = []
+        head = point = ListNode(0)
+        for l in lists:
+            while l:
+                self.nodes.append(l.val)
+                l = l.next
+        for x in sorted(self.nodes):
+            point.next = ListNode(x)
+            point = point.next
+        return head.next
+
+'''
+138.复制带随机指针的链表
+'''
+# dfs方法 因为需要保存节点所以比较耗空间O(n)
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        lookup={}
+        def dfs(node):
+            if not node: return None
+            if node in lookup: return lookup[node]
+            copy = Node(node.val)
+            lookup[node] = copy
+            copy.next, copy.random = dfs(node.next), dfs(node.random)
+            return copy
+        return dfs(head)
+
+# 方法二 线性时间方法
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        if not head: return None
+        node = head
+        while node:
+            tmp = node.next
+            node.next = Node(node.val)
+            node.next.next = tmp
+            node = tmp
+        node = head
+        while node:
+            if node.random:
+                node.next.random = node.random.next
+            node = node.next.next
+        # 拆分
+        copy_head = head.next
+        copy_pre = head
+        copy_post = head.next
+
+        while copy_pre:
+            # pre
+            copy_pre.next = copy_pre.next.next
+            copy_pre = copy_pre.next
+            # post
+            if copy_pre:
+                copy_post.next = copy_pre.next
+                copy_post = copy_post.next
+        return copy_head

@@ -235,19 +235,19 @@ class Solution:
         return res
 
 # 题解方法 递归
+'''
+做剑指offer的时候发现这种方法比前面两个好太多了，还用’#‘代替空节点，万一树本身就有’#‘呢
+'''
 class Solution:
     def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
-        # 采用层次遍历
-        if p and q:
-            if p.val == q.val:
-                return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
-            else:
-                return False
-        else:
-            if p or q:
-                return False
-            else:
-                return True
+        if not p and not q:
+            return True
+        # one of p and q is None
+        if not q or not p:
+            return False
+        if p.val != q.val:
+            return False
+        return self.isSameTree(p.right, q.right) and self.isSameTree(p.left, q.left)
 
 '''
 101 Symmetric Tree 对称二叉树
@@ -290,7 +290,45 @@ class Solution:
                 return False
             else:
                 return True
+'''
+572.另一个树的子树
+'''
+class Solution:
+    def isSubtree(self, s: TreeNode, t: TreeNode) -> bool:
+        if not s or not t:
+            return False
+        if s.val == t.val:
+            if self.issame(s, t): return True
+        if self.isSubtree(s.left, t): return True
+        if self.isSubtree(s.right, t): return True
 
+    def issame(self, s, t):
+        if not s and not t:
+            return True
+        if not s or not t:
+            return False
+        if s.val != t.val:
+            return False
+        return self.issame(s.left, t.left) and self.issame(s.right, t.right)
+
+'''
+113.路径总和
+'''
+# 刚开始自己写的dfs方法 但我觉得我写的好像有点复杂，应该题解有更简洁的写法
+class Solution:
+    def pathSum(self, root: TreeNode, sumr: int) -> List[List[int]]:
+        res = []
+        def dfs(node, tmp):
+            if sum(tmp)+node.val == sumr and not node.left and not node.right:
+                res.append(tmp+[node.val])
+            else:
+                if node.left:
+                    dfs(node.left, tmp+[node.val])
+                if node.right:
+                    dfs(node.right, tmp+[node.val])
+        if root:
+            dfs(root, [])
+        return res
 
 
 

@@ -104,7 +104,7 @@ class MyQueue:
             return True
 
 '''
-252. Implement Stack using Queues: 用队列实现栈
+225. Implement Stack using Queues: 用队列实现栈
 '''
 # 看完官方题解后的python实现~
 # 方法一： 出列 入列全都在que1，que2用于暂存出队列的元素
@@ -166,7 +166,6 @@ class MyStack:
     # deque()模拟
     def __init__(self):
         self.que1 = deque()
-        self.que2 = deque()
 
     def push(self, x: int) -> None:
         self.que1.append(x)
