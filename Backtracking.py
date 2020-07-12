@@ -58,6 +58,8 @@ class Solution:
         res = []
         def helper(start, st):
             # 真的是很奇怪，这里不能用res.append(st) 真的是搞不懂  希望有人解释一下
+            # 破案了，在做到47题的时候 liweiwei大佬的题解中有详细说明为什么不能用append(st)
+            # 链接：https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liweiw/
             res.append(st[:])
             for i in range(start, L):
                 st.append(nums[i])
@@ -135,6 +137,36 @@ class Solution:
             res = temp
         return res
 
+# 方法三 回溯法 主动去重
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        nums.sort()
+        def helper(i, tmp):
+            res.append(tmp)
+            for j in range(i, n):
+                if j>i and nums[j] == nums[j-1]:
+                    continue
+                helper(j+1, tmp+[nums[j]])
+        helper(0, [])
+        return res
+
+# 这个也不错： @powcai
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        if not nums: return []
+        nums.sort()
+        res = [[]]
+        cur = []
+        for i in range(len(nums)):
+            if i > 0 and nums[i - 1] == nums[i]:
+                cur = [tmp + [nums[i]] for tmp in cur]
+            else:
+                cur = [tmp + [nums[i]] for tmp in res]
+            res += cur
+        return res
+
 '''
 77. Combinations: 组合
 describe: 给定两个整数 n 和 k，返回 1 ... n 中所有可能的k个数的组合。
@@ -180,10 +212,24 @@ class Solution:
         return res
 
     # 好像还可以用掩码的方法
+    # 后续补充
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        res = []
+        def helper(i, tmp):
+            if len(tmp) == k:
+                res.append(tmp)
+            else:
+                for j in range(i, n+1):
+                    helper(j+1, tmp+[j])
+        helper(1, [])
+        return res
+
 '''
 39. Combination Sum 组合总和
 '''
 # z只是想把代码发上来看看我有多奇葩 在超时的边缘反复试探
+# 后续：不忍直视 我建议可以不看
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
         res1 = []
@@ -209,25 +255,6 @@ class Solution:
 
         helper(target, [])
         return res1
-
-# 题解方法@powcai 还是觉得有点难理解,写不出来也是真的
-class Solution:
-    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
-        candidates.sort()
-        n = len(candidates)
-        res = []
-        def backtrack(i, tmp_sum, tmp):
-            if  tmp_sum > target or i == n:
-                return
-            if tmp_sum == target:
-                res.append(tmp)
-                return
-            for j in range(i, n):
-                if tmp_sum + candidates[j] > target:
-                    break
-                backtrack(j,tmp_sum + candidates[j],tmp+[candidates[j]])
-        backtrack(0, 0, [])
-        return res
 
 # 动态规划方法 @蠢萌哒小洋  我真的跪了...
 class Solution:
@@ -265,27 +292,27 @@ class Solution:
                 print(res)
         return res
 
-# 题解方法 （这个是我最容易理解的） @liweiwei1419
+# 后续补充
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()
         n = len(candidates)
+        candidates.sort()
         res = []
-        def helper(t, ind, temp):
-            if t==0:
-                res.append(temp)
-                return
-            for i in range(ind, n):
-                if t-candidates[i]<0:
+        def helper(i, tmp):
+            if sum(tmp) == target:
+                res.append(tmp)
+            for j in range(i, n):
+                if sum(tmp)+candidates[j]>target:
                     break
-                helper(t-candidates[i], i, temp+[candidates[i]])
-        helper(target, 0, [])
+                helper(j, tmp+[candidates[j]])
+        helper(0, [])
         return res
 
 '''
 40. Combination Sum II 组合总和 II
 '''
 # 今天依旧是在超时边缘试探的一天 ==
+# 后续：建议直接跳过
 from collections import Counter
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -346,3 +373,94 @@ class Solution:
                     helper(t-candidates[i], i+1, temp+[candidates[i]])
         helper(target, 0, [])
         return res
+
+
+'''
+216.组合总数III
+'''
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        res = []
+
+        def helper(i, tmp):
+            if len(tmp) == k and sum(tmp) == n:
+                res.append(tmp)
+            else:
+                if len(tmp) < k and sum(tmp) < n:
+                    for j in range(i + 1, 10):
+                        helper(j, tmp + [j])
+
+        helper(0, [])
+        return res
+'''
+377.组合总和IV
+原思路：先按照前面的组合题找到所有组合，再按照47题全排列，找出所有组合数
+评价：时间复杂度太高，很多有关递归的题目都可以用动态规划来优化算法。 输入为[4,2,1] 32时输出为39882198，可怕
+'''
+# 不得不说amazing
+class Solution:
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        res = [1] + [0] * target
+        for i in range(1, target + 1):
+            for j in nums:
+                if i - j >= 0:
+                    res[i] += res[i - j]
+        return res[target]
+
+
+'''
+46.全排列  
+'''
+# 看了参考答案的回溯法
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        def backtrack(nums, tmp):
+            if not nums:
+                res.append(tmp)
+            else:
+                for i in range(len(nums)):
+                    backtrack(nums[:i]+nums[i+1:], tmp+[nums[i]])
+        backtrack(nums, [])
+        return res
+
+'''
+47.全排列II
+'''
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        nums.sort()
+        def helper(nums, tmp):
+            if not nums:
+                res.append(tmp)
+            else:
+                for i in range(len(nums)):
+                    if i>0 and nums[i]==nums[i-1]:
+                        continue
+                    helper(nums[:i]+nums[i+1:], tmp+[nums[i]])
+        helper(nums, [])
+        return res
+
+# 剑指offer上提供了一个基于交换的思路
+
+'''
+01背包问题扩展，组合总数
+题目：给定一个由正整数组成且不存在重复数字的数组，找出和为给定目标正整数的组合的个数，同一个元素可以取多次。
+思路一：上面有写过的回溯法helper()
+思路二: 动态规划法
+nums：正整数组
+target：和目标
+'''
+nums = [1,2,3,4,5,6]
+n = len(nums)
+target = 6
+def conbine(n, nums, target):
+    res = [1]+[0]*target
+    for i in range(1, target+1):
+        for j in nums:
+            if i-j>=0:
+                res[i] += res[i-j]
+    return res[target]
+

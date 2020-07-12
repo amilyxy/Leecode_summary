@@ -285,6 +285,38 @@ class Solution:
             res[i] = insert(root, nums[i])
         return res
 
+'''
+169.多数元素（简单
+'''
+# 摩尔投票  复杂度  时间O(n) 空间O(1)
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        count = 0
+        cand = None
+        for i in nums:
+            if count == 0:
+                cand = i
+            count += (1 if i == cand else -1)
+        return cand
 
+# 暴力哈希 时间O(n)  空间O(n) 不详细说了
+# 快排 这个需要保证一定存在多数元素
+class Solution:
+    def majorityElement(self, numbers: List[int]) -> int:
+        numbers.sort()
+        return numbers[len(numbers)//2]
 
+'''
+974.和可被K整除的子数组
+思路: ①前缀和 ②同余定理
+'''
+class Solution:
+    def subarraysDivByK(self, A, K):
+        dic = {0: 1}
+        sumpre = 0
+        for i in A:
+            sumpre += i
+            dic[sumpre % K] = dic.get(sumpre % K, 0) + 1
+
+        return int(sum([dic[i] * (dic[i] - 1) / 2 for i in dic]))
 

@@ -286,6 +286,105 @@ class Solution:
             dp.append(min(dp[-j*j] for j in range(1, 1 + int(i**0.5))) + 1)
         return dp[-1]
 
+'''
+221.最大正方形
+'''
+class Solution:
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        m = len(matrix)
+        if m:
+            n = len(matrix[0])
+        else:
+            return 0
+        dp = [0]*(n+1)
+        res = 0
+        for i in range(m):
+            tmp = dp[:]
+            for j in range(1, n+1):
+                if matrix[i][j-1]=='1':
+                    dp[j] = min(tmp[j], tmp[j-1], dp[j-1])+1
+                    res = max(res, dp[j])
+                else:
+                    dp[j] = 0
+        return res*res
+    
+'''
+300.最长上升子序列
+'''
+# 方法一：动态规划法，时间复杂度O(n)
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if not n: return 0
+        dp = [1]*n
+        for i in range(n):
+            for j in range(i):
+                if nums[i]>nums[j]:
+                    dp[i] = max(dp[i], dp[j]+1)
+        return max(dp)
+
+# 二分法 动态更新
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if not n: 
+            return 0
+        li = [nums[0]]
+        for i in range(1,n):
+            if nums[i]<=li[-1]:
+                l, r = 0, len(li)-1
+                while l<=r:
+                    m = l+(r-l)//2
+                    if li[m]>=nums[i]:
+                        r = m-1
+                    else:
+                        l = m+1
+                li[l] = nums[i]
+            else:
+                li.append(nums[i])
+        return len(li)
+
+'''
+1143.最长公共子序列
+'''
+# 还有个递归做法 超时 不提倡
+class Solution:
+    def longestCommonSubsequence(self, str1, str2) -> int:
+        m, n = len(str1), len(str2)
+        dp = [[0]*(n+1) for _ in range(m+1)]
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                if str1[i-1] == str2[j-1]:
+                    dp[i][j] = dp[i-1][j-1]+1
+                else:
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j])
+        return dp[-1][-1]
+
+'''
+73.编辑距离
+经典动态规划题了
+'''
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        m, n = len(word1), len(word2)
+        dp = [[0]*(n+1) for _ in range(m+1)]
+        for i in range(1, n+1):
+            dp[0][i] = dp[0][i-1]+1
+        for i in range(1, m+1):
+            dp[i][0] = dp[i-1][0]+1
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                if word1[i-1] == word2[j-1]:
+                    dp[i][j] = dp[i-1][j-1]
+                else:
+                    # 含义依次为删除、插入、替换
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])+1
+        return dp[-1][-1]
+
+
+
+
+
 
 
 

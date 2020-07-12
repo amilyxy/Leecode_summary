@@ -113,6 +113,23 @@ class Solution:
         else:
             return False
 
+# 不用递归，用栈解决
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        stack = [start]
+        marked = set()
+        n = len(arr)
+        while stack:
+            tmp = stack.pop()
+            if arr[tmp] == 0:
+                return True
+            else:
+                for i in [tmp+arr[tmp], tmp-arr[tmp]]:
+                    if 0<=i<n and i not in marked:
+                        stack.append(i)
+                        marked.add(i)
+        return False
+
 '''
 1309. 解码字母到整数映射
 '''

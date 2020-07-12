@@ -195,3 +195,107 @@ class Solution:
     def addBinary(self, a: str, b: str) -> str:
         res = bin(int(a, 2) + int(b, 2))
         return res[2:]
+
+'''
+263.丑数 
+desc: 判断一个数是否为丑数，包括递归和非递归做法
+'''
+# 递归方法 @powcai
+class Solution:
+    def isUgly(self, num: int) -> bool:
+        if num == 0: return False
+        if num == 1:return True
+        if num % 2 == 0: return self.isUgly(num // 2)
+        if num % 3 == 0: return self.isUgly(num // 3)
+        if num % 5 == 0: return self.isUgly(num // 5)
+        return False
+
+# 迭代方法：
+class Solution:
+    def isUgly(self, num: int) -> bool:
+        if num ==0: return False
+        for i in 2, 3, 5:
+            while num % i == 0:
+                num //= i
+        return num == 1
+
+
+'''
+264.丑数II
+在此之前有个类似题型：263.丑数，判断一个数是不是丑数，这个很简单
+'''
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        res = [1]
+        dic = {}
+        for i in [2,3,5]:
+            dic[i] = 0
+        for i in range(n-1):
+            tmp = min([res[dic[i]]*i for i in dic])
+            for i in dic:
+                if tmp == res[dic[i]]*i:
+                    dic[i] = dic[i]+1
+            res.append(tmp)
+        # print(res)
+        return res[-1]
+'''
+313.超级丑数
+也就是把264题中[2,3,5]替换成primes,其他不变
+'''
+class Solution:
+    def nthSuperUglyNumber(self, n: int, primes: List[int]) -> int:
+        res = [1]
+        dic = {}
+        for i in primes:
+            dic[i] = 0
+        for i in range(n-1):
+            tmp = min([res[dic[i]]*i for i in dic])
+            for i in dic:
+                if tmp == res[dic[i]]*i:
+                    dic[i] = dic[i]+1
+            res.append(tmp)
+        # print(res)
+        return res[-1]
+'''
+204.计数质数
+方法一：采用厄拉多塞筛法
+'''
+import math
+class Solution:
+    def countPrimes(self, n: int) -> int:
+        res = 0
+        tmp = [1]*n
+        for i in range(2, n):
+            if tmp[i]: res+=1
+            j = i
+            while j*i<n:
+                tmp[j*i]=0
+                j+=1
+        return res
+
+# 改进方法
+import math
+class Solution:
+    def countPrimes(self, n: int) -> int:
+        if n<=1: return 0
+        res = [0, 0]+[1]*(n-2)
+        for i in range(2, int(math.sqrt(n))+1):
+            if res[i]:
+                k = i
+                while k*i<n:
+                    res[k*i] = 0
+                    k+=1
+        return sum(res)
+    
+'''
+172.阶乘后的0
+'''
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        if n<5: return 0
+        res = 0
+        while n>0:
+            n //= 5
+            res += n
+        return res
+
