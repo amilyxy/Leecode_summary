@@ -306,5 +306,17 @@ class Solution:
         numbers.sort()
         return numbers[len(numbers)//2]
 
+'''
+974.和可被K整除的子数组
+思路: ①前缀和 ②同余定理
+'''
+class Solution:
+    def subarraysDivByK(self, A, K):
+        dic = {0: 1}
+        sumpre = 0
+        for i in A:
+            sumpre += i
+            dic[sumpre % K] = dic.get(sumpre % K, 0) + 1
 
+        return int(sum([dic[i] * (dic[i] - 1) / 2 for i in dic]))
 

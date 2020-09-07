@@ -36,8 +36,8 @@ class Solution:
 
 '''
 2.二维数组中的查找
-'''
 # 原始方案：暴力查找 时间复杂度O(n^2)
+'''
 class Solution:
     def Find(self, target, array):
         m = len(array)
@@ -46,6 +46,28 @@ class Solution:
             for j in range(n):
                 if array[i][j] == target:
                     return True
+        return False
+
+# 优化方案一 ： 左上寻找 逐步减少查询范围   时间复杂度最多能O(n^2),好像并没有很优化多少
+class Solution:
+    def Find(self, target, array):
+        m = len(array)
+        n = len(array[0])
+        temp = 0
+        while temp<m and temp<n:
+            for i in range(temp, m):
+                if array[i][temp] == target:
+                    return True
+                if array[i][temp] > target:
+                    m = i
+                    break
+            for j in range(temp, n):
+                if array[temp][j] == target:
+                    return True
+                if array[temp][j] > target:
+                    n = j
+                    break
+            temp+=1
         return False
 
 # 优化方案二 右上查询 时间复杂度O(m+n)
@@ -510,7 +532,9 @@ class Solution:
         else:
             # 匹配到与pRoot2相同的根节点 
             return self.equal(pRoot1, pRoot2)|self.equal(pRoot1.left, pRoot2)|self.equal(pRoot1.right, pRoot2)
+        
         '''
+
     def equal(self, node1, node2):
         if not node2:
             return True

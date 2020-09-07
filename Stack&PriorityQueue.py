@@ -185,6 +185,81 @@ class MyStack:
             return False
         return True
 
+'''
+20.有效的括号
+'''
+class Solution:
+    def isValid(self, s: str) -> bool:
+        dic = {'}':'{', ']':'[', ')':'('}
+        stack = []
+        for i in s:
+            if stack and i in dic:
+                if stack[-1] == dic[i]:
+                    tmp = stack.pop()
+                else:
+                    return False
+            else:
+                stack.append(i)
+        return not stack
+
+'''
+678.有效的括号字符串
+'''
+# 栈的方法
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        stack = []
+        star = []
+        for i in range(len(s)):
+            if s[i] =='(':
+                stack.append(i)
+            elif s[i] == '*':
+                star.append(i)
+            else:  #先消化所有的')'
+                if not stack and not star:
+                    return False
+                if stack:
+                    stack.pop()
+                else:
+                    star.pop()
+        while stack and star:
+            if star.pop()<stack.pop():
+                return False
+        return not stack
+
+'''
+# 贪心算法
+基本解释：
+① lo、hi表示可能的最少和最多的左括号
+② 遇到左括号 lo++ hi++ 遇到右括号lo-- hi-- 遇到*，分为两种情况 lo--(右括号) hi++(左括号) lo=0时不能-1，此时不能当做右括号
+最后需要lo>0
+'''
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        lo, hi = 0, 0
+        for i in s:
+            if i == '(':
+                lo, hi = lo + 1, hi + 1
+            if i == ')':
+                if lo > 0: lo -= 1
+                hi -= 1
+            if i == '*':
+                if lo > 0: lo -= 1
+                hi += 1
+            if hi < 0:
+                return False
+        return not lo
+
+
+
+
+
+
+
+
+
+
+
 
 
 

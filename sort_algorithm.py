@@ -151,5 +151,44 @@ class Solution:
             gap //= 2
         return nums
 
+'''
+Heap Sort 堆排序
+选择排序进阶版本
+不稳定排序 空间复杂度O(1) 时间复杂度O(nlog2n)
+父节点i的左子节点： 2*i+1
+父节点i的左子节点： 2*i+2
+子结点i的父节点：(i-1)//2
+'''
+# 写法一 大顶堆 如果需要降序排序只要将heapsort，大顶堆改为小顶堆即可 sortarray不变
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        if n == 1: return nums
+        for i in range(n//2-1, -1, -1):
+            self.heapify(nums, i, n-1)
+        for i in range(n-1, 0, -1):
+            nums[i], nums[0] = nums[0], nums[i] #将大顶堆堆顶放到最后
+            self.heapify(nums, 0, i-1)  #调整剩下的数为大顶堆
+        return nums
+
+    def heapify(self, arr, par, end):
+        temp = arr[par]  # 父节点值
+        son = 2*par+1 #左子结点
+        while son<=end:
+            if son<end and arr[son]<arr[son+1]: #选择左子结点和右子结点较大的一个
+                son+=1
+            if temp>=arr[son]:
+                break
+            arr[par]=arr[son]  #若大于父节点 上浮
+            par=son
+            son=2*son+1
+        arr[par]=temp
+
+# 写法二 小顶堆
+
+
+
+
+
 
 

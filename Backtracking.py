@@ -256,6 +256,25 @@ class Solution:
         helper(target, [])
         return res1
 
+# 题解方法@powcai 还是觉得有点难理解,写不出来也是真的
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def backtrack(i, tmp_sum, tmp):
+            if  tmp_sum > target or i == n:
+                return
+            if tmp_sum == target:
+                res.append(tmp)
+                return
+            for j in range(i, n):
+                if tmp_sum + candidates[j] > target:
+                    break
+                backtrack(j,tmp_sum + candidates[j],tmp+[candidates[j]])
+        backtrack(0, 0, [])
+        return res
+
 # 动态规划方法 @蠢萌哒小洋  我真的跪了...
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -292,20 +311,21 @@ class Solution:
                 print(res)
         return res
 
-# 后续补充
+# 题解方法 （这个是我最容易理解的） @liweiwei1419
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        n = len(candidates)
         candidates.sort()
+        n = len(candidates)
         res = []
-        def helper(i, tmp):
-            if sum(tmp) == target:
-                res.append(tmp)
-            for j in range(i, n):
-                if sum(tmp)+candidates[j]>target:
+        def helper(t, ind, temp):
+            if t==0:
+                res.append(temp)
+                return
+            for i in range(ind, n):
+                if t-candidates[i]<0:
                     break
-                helper(j, tmp+[candidates[j]])
-        helper(0, [])
+                helper(t-candidates[i], i, temp+[candidates[i]])
+        helper(target, 0, [])
         return res
 
 '''

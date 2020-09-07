@@ -287,3 +287,15 @@ class Solution:
                     k+=1
         return sum(res)
 
+'''
+172.阶乘后的0
+'''
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        if n<5: return 0
+        res = 0
+        while n>0:
+            n //= 5
+            res += n
+        return res
+
