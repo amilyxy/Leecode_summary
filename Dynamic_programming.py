@@ -286,6 +286,29 @@ class Solution:
             dp.append(min(dp[-j*j] for j in range(1, 1 + int(i**0.5))) + 1)
         return dp[-1]
 
+'''
+221.最大正方形
+'''
+class Solution:
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        m = len(matrix)
+        if m:
+            n = len(matrix[0])
+        else:
+            return 0
+        dp = [0]*(n+1)
+        res = 0
+        for i in range(m):
+            tmp = dp[:]
+            for j in range(1, n+1):
+                if matrix[i][j-1]=='1':
+                    dp[j] = min(tmp[j], tmp[j-1], dp[j-1])+1
+                    res = max(res, dp[j])
+                else:
+                    dp[j] = 0
+        return res*res
+
+
 
 
 

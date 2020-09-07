@@ -285,6 +285,26 @@ class Solution:
             res[i] = insert(root, nums[i])
         return res
 
+'''
+169.多数元素（简单
+'''
+# 摩尔投票  复杂度  时间O(n) 空间O(1)
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        count = 0
+        cand = None
+        for i in nums:
+            if count == 0:
+                cand = i
+            count += (1 if i == cand else -1)
+        return cand
+
+# 暴力哈希 时间O(n)  空间O(n) 不详细说了
+# 快排 这个需要保证一定存在多数元素
+class Solution:
+    def majorityElement(self, numbers: List[int]) -> int:
+        numbers.sort()
+        return numbers[len(numbers)//2]
 
 
 
