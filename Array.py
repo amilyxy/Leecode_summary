@@ -320,3 +320,19 @@ class Solution:
 
         return int(sum([dic[i] * (dic[i] - 1) / 2 for i in dic]))
 
+'''
+523.连续的子数组和
+思路: 前缀和
+'''
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        if len(nums) < 2: return False
+        dp, cur = {0: -1}, 0
+        for idx, num in enumerate(nums):
+            cur += num
+            if k != 0: cur %= k
+            pre = dp.setdefault(cur, idx)
+            if idx - pre > 1: return True
+        return False
+
+

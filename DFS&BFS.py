@@ -100,8 +100,7 @@ class Solution:
                         for dire in directions:
                             new_x = x + dire[0]
                             new_y = y + dire[1]
-                            if (0 <= new_x < m) and (0 <= new_y < n) and not marked[new_x][new_y] and board[new_x][
-                                new_y] == 'O':
+                            if (0 <= new_x < m) and (0 <= new_y < n) and not marked[new_x][new_y] and board[new_x][new_y] == 'O':
                                 queue.append((new_x, new_y))
                                 change.append((new_x, new_y))
                                 marked[new_x][new_y] = 1

@@ -309,9 +309,13 @@ class Solution:
         return res*res
 
 '''
-300.最长上升子序列
+300.
+最长上升子序列
 '''
 # 方法一：动态规划法，时间复杂度O(n)
+'''
+求长度
+'''
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
@@ -322,8 +326,31 @@ class Solution:
                 if nums[i]>nums[j]:
                     dp[i] = max(dp[i], dp[j]+1)
         return max(dp)
+'''
+求子序列
+'''
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if not n: return 0
+        dp = [1]*n
+        for i in range(n-2, -1, -1):
+            for j in range(n-1, i, -1):
+                if nums[i]<nums[j] and dp[i]<=dp[j]:
+                    dp[i] += 1
+        res = []
+        tmp = max(dp)
+        print(dp)
+        for i in range(n):
+            if tmp == dp[i]:
+                res.append(nums[i])
+                tmp -= 1
+        return res
 
 # 二分法 动态更新
+'''
+li ≠ 子序列
+'''
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
@@ -381,6 +408,80 @@ class Solution:
                     dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])+1
         return dp[-1][-1]
 
+'''
+674.最长连续递增子序列
+desc: 给定一个未经排序的整数数组，找到最长且连续的的递增序列，并返回该序列的长度
+'''
+'''
+不需要求子序列
+'''
+class Solution(object):
+    def findLengthOfLCIS(self, nums):
+        res = 0
+        pre = 0
+        for i in range(len(nums)):
+            if i and nums[i-1] >= nums[i]:
+                pre = i
+            res = max(res, i - pre + 1)
+        return res
+
+'''
+输出子序列
+'''
+class Solution(object):
+    def findLengthOfLCIS(self, nums):
+        res = []
+        pre = 0
+        for i in range(len(nums)):
+            if i and nums[i-1] >= nums[i]:
+                pre = i
+            if len(res)<(i-pre+1):
+                res = nums[pre:i+1]
+        return res
+
+
+'''
+718.最长重复子数组
+'''
+class Solution:
+    def findLength(self, a: List[int], b: List[int]) -> int:
+        na, nb = len(a), len(b)
+        dp = [0]*na
+        res = 0
+        for i in range(nb):
+            for j in range(na-1, -1, -1):
+                if b[i] == a[j]:
+                    if j == 0:
+                        dp[j] = 1
+                    else:
+                        dp[j] = dp[j-1]+1
+                else:
+                    dp[j] = 0
+            res = max(max(dp), res)
+            # print(dp)
+        return res
+
+'''
+647.回文子串
+'''
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        dp = [[0]*n for _ in range(n)]
+        count = 0
+        for i in range(n):
+            for j in range(i+1):
+                l = i-j+1
+                if l==1:
+                    dp[i][j] = 1
+                    count+=1
+                if l==2 and s[j] == s[i]:
+                    dp[i][j] = 1
+                    count+=1
+                if l>2 and s[j] == s[i] and dp[i-1][j+1]:
+                    dp[i][j] = 1
+                    count+=1
+        return count
 
 
 

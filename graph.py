@@ -218,6 +218,55 @@ class Solution:
             res = max(res, max(slope.values()) + points_dict[no_repeat_point[i]])
         return res
 
+'''
+743.网络延时时间
+'''
+# 暴力dfs方法
+from collections import defaultdict
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        graph = defaultdict(list)
+        for i in times:
+            graph[i[0]].append([i[2], i[1]])
+        dic = {node: float('inf') for node in range(1, N+1)}
+
+        def dfs(node, time):
+            if dic[node] <= time:
+                return
+            dic[node] = time
+            for i, j in sorted(graph[node]):
+                dfs(j, i+time)
+
+        dfs(K, 0)
+        ans = max(dic.values())
+        return ans if ans<float('inf') else -1
+
+# 地杰斯特拉方法
+from collections import defaultdict
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        graph = defaultdict(list)
+        for i in times:
+            graph[i[0]-1].append([i[1]-1, i[2]])
+        dic = {node: float('inf') for node in range(0, N)}
+        marked = [0 for i in range(N)]
+        dic[K-1] = 0
+
+        while 1:
+            node = -1
+            node_dist = float('inf')
+            for i in range(N):
+                if not marked[i] and dic[i]<node_dist:
+                    node_dist = dic[i]
+                    node = i
+            if node == -1:
+                break
+            marked[node] = 1
+            for i, j in graph[node]:
+                dic[i] = min(dic[i], dic[node]+j)
+
+        ans = max(dic.values())
+        return ans if ans<float('inf') else -1
 
 
 
