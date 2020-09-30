@@ -8,6 +8,21 @@
 -------------------------------------------------
 """
 '''
+55.跳跃游戏
+贪心算法
+'''
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        maxp = 0
+        for i in range(len(nums)):
+            if i<=maxp:
+                maxp = max(maxp, i+nums[i])
+                if maxp>=len(nums)-1:
+                    return True
+            # else: break
+        return False
+
+'''
 45.跳跃游戏II
 其实本来应该放在贪心算法的章节，但是没有啊，那就放这里吧
 '''
