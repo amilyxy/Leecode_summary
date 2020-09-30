@@ -246,6 +246,34 @@ class Solution:
         res = res.rstrip()
         return res
 
+'''
+459.重复的子字符串
+'''
+# 方法一 暴力重复
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        n = len(s)
+        for i in range(1, n):
+            if n%i == 0:
+                if s[:i]*(n//i) == s:
+                    return True
+        return False
+
+
+# kmp方法
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        pnext = [0, 0]
+        j = 0
+        for i in range(1, len(s)):
+            while j > 0 and s[i] != s[j]:
+                j = pnext[j]
+            if s[j] == s[i]:
+                j += 1
+            pnext.append(j)
+        return len(s) % (len(s)-pnext[-1]) == 0 and pnext[-1] > 0
+
+
 
 
 

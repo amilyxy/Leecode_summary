@@ -331,3 +331,76 @@ class Solution:
                 copy_post.next = copy_pre.next
                 copy_post = copy_post.next
         return copy_head
+
+'''
+148.排序链表
+'''
+# 在 O(nlogn) 时间复杂度和常数级空间复杂度下，对链表进行排序。
+# 方法一：递归，但这样不是常数级空间复杂度
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        node1, node2 = head, head.next
+        while node2 and node2.next:
+            node1, node2 = node1.next, node2.next.next
+        mid, node1.next = node1.next, None
+        left, right = self.sortList(head), self.sortList(mid)
+        new = res = ListNode(0)
+        while left and right:
+            if left.val<right.val:
+                res.next, left = left, left.next
+            else:
+                res.next, right = right, right.next
+            res = res.next
+        res.next = left if left else right
+        return new.next
+
+# 方法二：迭代
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        h, count, length = head, 1, 0
+        while h:
+            h = h.next
+            length += 1
+        res = ListNode(0)
+        res.next = head
+        while count<length:
+            pre, h = res, res.next
+            while h:
+                h1, i = h, count
+                while i and h:
+                    h, i = h.next, i-1
+                if i: break
+                h2, i = h, count
+                while i and h:
+                    h, i = h.next, i-1
+                c1, c2 = count, count-i
+                while c1 and c2:
+                    if h1.val<h2.val:
+                        pre.next, h1, c1 = h1, h1.next, c1-1
+                    else:
+                        pre.next, h2, c2 = h2, h2.next, c2-1
+                    pre = pre.next
+                pre.next = h1 if c1 else h2
+                while c1>0 or c2>0:
+                    pre, c1, c2 = pre.next, c1-1, c2-1
+                pre.next = h
+            count *= 2
+        return res.next
+
+'''
+面试题 02.06 回文链表
+desc: 编写一个函数，检查输入的链表是否是回文的。
+'''
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        node1, node2, pre = head, head, None
+        while node2 and node2.next:
+            node2 = node2.next.next
+            pre, node1.next, node1 = node1, pre, node1.next
+        if node2:
+            node1 = node1.next
+        while pre and pre.val == node1.val:
+            node1, pre = node1.next, pre.next
+        return pre is None

@@ -330,8 +330,30 @@ class Solution:
             dfs(root, [])
         return res
 
-
-
+'''
+199.二叉树的右视图
+'''
+# 方法一 层次遍历
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        res = []
+        stack = [root]
+        if not root:
+            return res
+        next_s = []
+        res.append(root.val)
+        while stack:
+            node = stack.pop(0)
+            if node.left:
+                next_s.append(node.left)
+            if node.right:
+                next_s.append(node.right)
+            if not stack:
+                stack = next_s
+                if next_s:
+                    res.append(next_s[-1].val)
+                next_s = []
+        return res
 
 
 

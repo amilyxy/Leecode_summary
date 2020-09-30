@@ -51,7 +51,7 @@ class Solution:
         return numsrandom
 
 '''
-384. Random Pick Index 随机数索引
+398. Random Pick Index 随机数索引
 '''
 class Solution:
     def __init__(self, nums: list[int]):
