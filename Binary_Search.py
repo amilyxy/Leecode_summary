@@ -188,3 +188,18 @@ class Solution:
             else:
                 r = mid
         return nums[l]
+'''
+162.寻找峰值
+desc:按题目的意思是数组中没有重复元素
+'''
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        l, r = 0, len(nums)-1
+        while l<r:
+            m = l+(r-l)//2
+            if nums[m]>nums[m+1]:
+                r = m
+            else:
+                l = m+1
+        return l
+

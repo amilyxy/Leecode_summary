@@ -334,6 +334,7 @@ class Solution:
             pre = dp.setdefault(cur, idx)
             if idx - pre > 1: return True
         return False
+
 '''
 88.合并两个有序数组
 '''

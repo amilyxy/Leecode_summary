@@ -121,23 +121,24 @@ python求平方根
 ① 二分法 ②牛顿法
 '''
 def sqrt_binary(num):
-  y=num/2.0
-  low=0.0
-  up=num*1.0
-  while abs(y*y-num)>0.00000001:
-    if (y*y>num):
-      up=y
-      y=low+(y-low)/2
+    if num >= 1:
+        low, high = 1.0, 1.0 * num
     else:
-      low=y
-      y=up-(up-y)/2
-  return y
+        low, high = 1.0 * num, 1
+    mid = low + (high - low) / 2
+    while abs(mid ** 2 - num) > 0.000000001:
+        mid = low + (high - low) / 2
+        if mid ** 2 > num:
+            high = mid
+        else:
+            low = mid
+    return mid
 
 def sqrt_newton(num):
-  y=num/2.0
-  while abs(y*y-num)>0.00000001:
-    y=((y*1.0)+(1.0*num)/y)/2.0000
-  return y
+    y=num/2.0
+    while abs(y*y-num)>0.00000001:
+        y=((y*1.0)+(1.0*num)/y)/2.0000
+    return y
 
 
 
