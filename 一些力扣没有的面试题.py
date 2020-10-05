@@ -53,9 +53,34 @@ def solution2(nums):
     return res
 
 '''
-3.数组中的最大值
-desc：给定一个先递增后递减数组(双调数组)，找出最大值
+3.面试题02.05 链表求和
+desc：比较烦的是要用链表返回
 '''
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        head = ListNode(0)
+        node = head
+        tmp = 0
+        while l1 or l2:
+            if l1:
+                tmp+=l1.val
+            if l2:
+                tmp+=l2.val
+            node.next = ListNode(tmp % 10)
+            tmp = tmp // 10
+            node = node.next
+            if l1:
+                l1 = l1.next
+            if l2:
+                l2 = l2.next
+        if tmp:
+            node.next = ListNode(tmp)
+        return head.next
 
 
 

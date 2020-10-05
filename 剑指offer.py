@@ -1692,7 +1692,7 @@ class Solution:
         return n and n+self.sumNums(n-1)
 
 '''
-40.构建乘积数组
+65.构建乘积数组
 '''
 class Solution:
     def constructArr(self, a: List[int]) -> List[int]:

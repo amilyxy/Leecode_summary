@@ -19,17 +19,18 @@ class ListNode:
     def __init__(self, x):
         self.val = x
         self.next = None
+
 class Solution:
     # 题解-迭代方法
     def reverseList(self, head: ListNode) -> ListNode:
-        pre = None
-        cur = head
-        while cur != None:
-            nexttemp = cur.next
-            cur.next = pre
-            pre = cur
-            cur = nexttemp
-        return pre
+        if not head:
+            return head
+        pre, cur = None, head
+        while cur:
+            tmp = cur.next
+            cur.next, pre = pre, cur
+            cur = tmp
+        return cur
 
     # 递归方法
     def reverseList(self, head: ListNode) -> ListNode:
@@ -404,3 +405,31 @@ class Solution:
         while pre and pre.val == node1.val:
             node1, pre = node1.next, pre.next
         return pre is None
+
+'''
+25.K个一组翻转链表
+'''
+class Solution:
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        phead = ListNode(0)
+        phead.next = head
+        pre = phead
+        while head:
+            tail = pre
+            for i in range(k):
+                tail = tail.next
+                if not tail:
+                    return phead.next
+            tnext = tail.next
+            head, tail = self.reverse(head, tail)
+            pre.next, tail.next = head, tnext
+            pre, head = tail, tail.next
+        return phead.next
+
+    def reverse(self, head, tail):
+        prep, p = None, head
+        while prep != tail:
+            tmp = p.next
+            p.next, prep = prep, p
+            p = tmp
+        return tail, head

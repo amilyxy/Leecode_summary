@@ -120,29 +120,27 @@ describe: 给定一个二叉树，返回它的后序遍历。
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
         # 方法一 递归
-        # out = []
-        # if root == None:
-        #     return []
-        # out.extend(self.postorderTraversal(root.left))
-        # out.extend(self.postorderTraversal(root.right))
-        # out.append(root.val)
-        # return out
+        out = []
+        if root == None:
+            return []
+        out.extend(self.postorderTraversal(root.left))
+        out.extend(self.postorderTraversal(root.right))
+        out.append(root.val)
+        return out
 
-        # 方法二 迭代 空间复杂度相当的高
-        stack, out = [], []
-        if root:
-            stack = [root]
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack, res = [root], []
         while stack:
-            node = stack.pop()
-            if type(node) == int:
-                out.append(node)
-                continue
-            stack.append(node.val)
-            if node.right:
-                stack.append(node.right)
+            node =stack.pop()
             if node.left:
                 stack.append(node.left)
-        return out
+            if node.right:
+                stack.append(node.right)
+            res.append(node.val)
+        return res[::-1]
 
 '''
 102. Binary Tree Level Order Traversal 二叉树的层次遍历
@@ -312,7 +310,49 @@ class Solution:
         return self.issame(s.left, t.left) and self.issame(s.right, t.right)
 
 '''
-113.路径总和
+112.路径总和
+desc: 只需判断是否又满足条件的路径
+'''
+# 我的
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if not root:
+            return False
+        if self.dfs(root, 0, sum):
+            return True
+        else:
+            return False
+
+    def dfs(self, node, res, sum):
+        if not node.left and not node.right and res + node.val == sum:
+            return True
+        else:
+            if node.left:
+                if self.dfs(node.left, res + node.val, sum):
+                    return True
+            if node.right:
+                if self.dfs(node.right, res + node.val, sum):
+                    return True
+
+# 简洁版本
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if not root:
+            return False
+        return self.dfs(root, sum)
+
+    def dfs(self, node, sum):
+        if not node:
+            return False
+        sum -= node.val
+        if not node.left and not node.right:
+            return sum == 0
+        else:
+            return self.dfs(node.left, sum) or self.dfs(node.right, sum)
+
+
+'''
+113.路径总和II
 '''
 # 刚开始自己写的dfs方法 但我觉得我写的好像有点复杂，应该题解有更简洁的写法
 class Solution:
@@ -354,6 +394,55 @@ class Solution:
                     res.append(next_s[-1].val)
                 next_s = []
         return res
+
+'''
+236.二叉树的最近公共祖先
+'''
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root or root == p or root == q:
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if not left: return right
+        if not right: return left
+        return root
+
+'''
+235.二叉搜索树的最近公共祖先
+'''
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        while root:
+            if root.val>p.val and root.val>q.val:
+                root = root.left
+            elif root.val<p.val and root.val<q.val:
+                root = root.right
+            else:
+                return root
+
+'''
+124.二叉树中的最大路径和
+递归
+'''
+class Solution:
+    def __init__(self):
+        self.maxsum = float('-inf')
+
+    def maxPathSum(self, root: TreeNode) -> int:
+        self.helper(root)
+        return self.maxsum
+
+    def helper(self, node):
+        if not node:
+            return 0
+        left = max(0, self.helper(node.left))
+        right = max(0, self.helper(node.right))
+
+        nodegain = left + right + node.val
+        self.maxsum = max(self.maxsum, nodegain)
+        return node.val + max(left, right)
+
 
 
 

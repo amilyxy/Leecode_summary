@@ -106,7 +106,6 @@ class Solution:
         # [0]用来避免对空列表取max，下面的比较次数为n^2
         return max([0] + [max_len[x] * max_len[y] for x in max_len for y in max_len if x & y == 0])
 
-
 '''
 201.数字范围按位与
 '''

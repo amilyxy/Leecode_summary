@@ -118,7 +118,9 @@ def powxn(x, n):
 
 '''
 python求平方根
-① 二分法 ②牛顿法
+① 二分法 （二分逼近sqrt(num)）
+②牛顿法 (借助泰勒级数，从初始值快速向零点逼近)
+公式：xi = 1/2*(x0+C/x0)
 '''
 def sqrt_binary(num):
     if num >= 1:
@@ -134,11 +136,13 @@ def sqrt_binary(num):
             low = mid
     return mid
 
+# 牛顿法
 def sqrt_newton(num):
-    y=num/2.0
-    while abs(y*y-num)>0.00000001:
-        y=((y*1.0)+(1.0*num)/y)/2.0000
-    return y
+    x = num/1.0
+    while abs(x*x-num)>0.00000001:
+        xi = ((x*1.0)+(1.0*num)/x)/2.0
+        x = xi
+    return x
 
 
 

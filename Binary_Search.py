@@ -203,3 +203,17 @@ class Solution:
                 l = m+1
         return l
 
+'''
+69.x的平方根
+注意：
+'''
+class Solution:
+    def mySqrt(self, num: int) -> int:
+        l, r = 0, num+1
+        while l<=r:
+            mid = l+(r-l)//2
+            if mid**2>num:
+                r = mid-1
+            else:
+                l = mid+1
+        return r

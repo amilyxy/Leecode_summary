@@ -307,6 +307,42 @@ class Solution:
         return numbers[len(numbers)//2]
 
 '''
+229.求众数
+dec: 给定一个大小为 n 的数组，找出其中所有出现超过⌊n/3⌋次的元素.
+'''
+# 摩尔投票法 O(1)方法，最后需要验证是否两个都满足条件
+class Solution:
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        if len(nums) <= 1:
+            return nums
+        dic = {}
+        for i in nums:
+            if i in dic:
+                dic[i] += 1
+            else:
+                if len(dic) < 2:
+                    dic[i] = 1
+                else:
+                    pop = []
+                    for j in dic:
+                        dic[j] -= 1
+                        if dic[j] == 0:
+                            pop.append(j)
+                    for j in pop:
+                        dic.pop(j)
+        # 验证
+        keys = set(dic.keys())
+        res = []
+        count = {}
+        for j in nums:
+            if j in keys:
+                count[j] = count.get(j, 0) + 1
+        for j in count:
+            if count[j] > len(nums) // 3:
+                res.append(j)
+        return res
+
+'''
 974.和可被K整除的子数组
 思路: ①前缀和 ②同余定理
 '''
@@ -347,4 +383,48 @@ class Solution:
             else:
                 nums1[m+n-1] = nums2[n-1]
                 n -= 1
+
+'''
+42.接雨水
+一共三种方法：①动态规划 ②单调栈 ③双指针
+'''
+# ①动态规划
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height: return 0
+        n = len(height)
+        maxleft = [height[0]]+[0]*(n-1)
+        maxright = [0]*(n-1)+[height[n-1]]
+        ans = 0
+        for i in range(1,n):
+            maxleft[i] = max(height[i],maxleft[i-1])
+        for j in range(n-2,-1,-1):
+            maxright[j] = max(height[j],maxright[j+1])
+        # 比较每个位置可以存储多少水
+        for i in range(1, n-1):
+            if min(maxleft[i],maxright[i]) > height[i]:
+                ans += min(maxleft[i],maxright[i]) - height[i]
+        return ans
+
+# ②单调栈 看的题解的@熊猫刷题
+class Solution:
+    # 单调栈
+    def trap(self, height: List[int]) -> int:
+        length = len(height)
+        if length < 3: return 0
+        res, idx = 0, 0
+        stack = []
+        while idx < length:
+            while len(stack) > 0 and height[idx] > height[stack[-1]]:
+                top = stack.pop()
+                if len(stack) == 0:
+                    break
+                h = min(height[stack[-1]], height[idx]) - height[top]
+                dist = idx - stack[-1] - 1
+                res += (dist * h)
+            stack.append(idx)
+            idx += 1
+        return res
+
+# ③双指针(有两种做法，可看题解)
 
