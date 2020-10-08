@@ -299,3 +299,114 @@ class Solution:
             res += n
         return res
 
+'''
+1.两数之和
+'''
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        dic = {}
+        for i in range(len(nums)):
+            dist = target-nums[i]
+            if dist in dic:
+                return [dic[dist], i]
+            dic[nums[i]] = i
+
+'''
+15.三数之和
+desc:双指针
+'''
+# 题解方法 @吴彦祖
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        if n<3: return []
+        res = []
+        nums.sort()
+        for i in range(n):
+            if nums[i]>0:
+                return res
+            if i>0 and nums[i]==nums[i-1]:
+                continue
+            l, m, r = i, i+1, n-1
+            while m<r:
+                if nums[l]+nums[m]+nums[r]==0:
+                    res.append([nums[l], nums[m], nums[r]])
+                    while m<r and nums[m]==nums[m+1]:
+                        m+=1
+                    while m<r and nums[r]==nums[r-1]:
+                        r-=1
+                    m+=1
+                    r-=1
+                elif nums[l]+nums[m]+nums[r]>0:
+                    r-=1
+                else:
+                    m+=1
+        return res
+
+'''
+18.四数之和
+desc：①类似LC40 组合总和，用组合的方式解决（会超时），考虑进行剪枝
+'''
+# 回溯法
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        nums.sort()
+        res = []
+        self.dfs(0, res, [], target, nums)
+        return res
+
+    def dfs(self, i, res, tmp, target, nums):
+        if len(tmp) == 4 and sum(tmp)==target:
+            res.append(tmp)
+        if len(tmp)<4:
+            for j in range(i, len(nums)):
+                # 剪枝一
+                if sum(tmp)+(4-len(tmp))*(nums[-1])<target:
+                    break
+                # 剪枝二
+                if sum(tmp)+(4-len(tmp))*(nums[j])>target:
+                    break
+                # 去重
+                if j>i and nums[j]==nums[j-1]:
+                    continue
+                self.dfs(j+1, res, tmp+[nums[j]], target, nums)
+
+# 双指针 类似三数之和，固定两个l和midl然后遍历寻找midr和r
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        n = len(nums)
+        if n<4: return []
+        nums.sort()
+        if nums[-1]*4<target or nums[0]*4>target:
+            return []
+        res = []
+        for l in range(n-3):
+            if l>0 and nums[l]==nums[l-1]:
+                continue
+            if nums[l]*4>target:
+                return res
+            for ml in range(l+1, n-2):
+                if ml>l+1 and nums[ml]==nums[ml-1]:
+                    continue
+                mr, r = ml+1, n-1
+                if nums[l]+nums[ml]+nums[mr]*2>target:
+                    break
+                if nums[l]+nums[ml]+nums[r]*2<target:
+                    continue
+                while mr<r:
+                    tmp = [nums[l],nums[ml],nums[mr],nums[r]]
+                    if sum(tmp)==target:
+                        res.append(tmp)
+                        while mr<r and nums[mr]==nums[mr+1]:
+                            mr+=1
+                        while mr<r and nums[r]==nums[r-1]:
+                            r-=1
+                        mr+=1
+                        r-=1
+                    elif sum(tmp)<target:
+                        mr+=1
+                    else:
+                        r-=1
+        return res
+
+

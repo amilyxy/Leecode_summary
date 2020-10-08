@@ -196,10 +196,9 @@ class Solution:
         # s.reverse()
 
         # 方法二 交换
-        n = len(s)
-        cgnum = n//2
-        for i in range(cgnum):
-            s[i], s[n-i-1] = s[n-i-1], s[i]
+        n = len(s)-1
+        for i in range(n//2+1):
+            s[i], s[n-i] = s[n-i], s[i]
 
         #方法三 不知道这个算不算原地操作
         s[:] = s[::-1]

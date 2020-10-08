@@ -428,3 +428,17 @@ class Solution:
 
 # ③双指针(有两种做法，可看题解)
 
+'''
+75.颜色分类
+desc: 双指针
+'''
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        l, r = 0, len(nums) - 1
+        for i in range(len(nums)):
+            while i <= r and nums[i] == 2:
+                nums[r], nums[i] = nums[i], nums[r]
+                r -= 1
+            if nums[i] == 0:
+                nums[l], nums[i] = nums[i], nums[l]
+                l += 1

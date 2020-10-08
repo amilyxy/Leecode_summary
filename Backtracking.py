@@ -374,7 +374,7 @@ class Solution:
         helper(target, 0, [])
         return res
 
-# 前一种方法的改进
+# 目前来说最好的做法
 class Solution:
     def combinationSum2(self, candidates: list[int], target: int) -> list[list[int]]:
         candidates.sort()
