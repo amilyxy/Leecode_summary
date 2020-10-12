@@ -410,3 +410,34 @@ class Solution:
         return res
 
 
+'''
+1363.形成三的最大倍数
+'''
+class Solution:
+    def largestMultipleOfThree(self, digits: List[int]) -> str:
+        cnt, mod = [0] * 10, [0] * 3
+        sumi = 0
+        for i in digits:
+            cnt[i] += 1
+            mod[i % 3] += 1
+            sumi += i
+
+        remove_mod, rest = 0, 0
+        if sumi % 3 == 1:
+            remove_mod, rest = (1, 1) if mod[1] >= 1 else (2, 2)
+        elif sumi % 3 == 2:
+            remove_mod, rest = (2, 1) if mod[2] >= 1 else (1, 2)
+
+        ans = ""
+        for i in range(0, 10):
+            if cnt[i] and rest and i % 3 == remove_mod:
+                rest -= 1
+                cnt[i] -= 1
+                if rest == 0:
+                    ans += (str(i) * cnt[i])
+            else:
+                ans += (str(i) * cnt[i])
+        if len(ans) > 0 and ans[-1] == "0":
+            ans = "0"
+        return ans[::-1]
+
