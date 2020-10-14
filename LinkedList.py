@@ -140,6 +140,23 @@ class Solution:
     https://leetcode-cn.com/problems/swap-nodes-in-pairs/solution/di-gui-2chong-fei-di-gui-by-heng-29/
     '''
 
+    '''
+    后续写的一个简单的递归版本，也可以改成非递归的，易懂
+    '''
+    class Solution:
+        def swapPairs(self, head: ListNode) -> ListNode:
+            nhead = ListNode(0)
+            nhead.next = head
+            self.helper(nhead, head)
+            return nhead.next
+
+        def helper(self, pre, node):
+            if node and node.next:
+                pre.next = node.next
+                pre.next.next, node.next = node, pre.next.next
+                self.helper(node, node.next)
+
+
 '''
 328.Odd Even Linked List 奇偶链表
 '''

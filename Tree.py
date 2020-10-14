@@ -443,6 +443,41 @@ class Solution:
         self.maxsum = max(self.maxsum, nodegain)
         return node.val + max(left, right)
 
+'''
+543.二叉树的直径
+'''
+class Solution:
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        self.max = 0
+        self.helper(root)
+        return self.max
+
+    def helper(self, node):
+        if not node:
+            return 0
+        left = self.helper(node.left)
+        right = self.helper(node.right)
+        self.max = max(self.max, left+right)
+        return max(left, right)+1
+
+'''
+530. 二叉搜索树的最小绝对差 / 783.二叉搜索树节点最小距离
+'''
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        self.pre = 'inf'
+        self.diff = 'inf'
+        self.helper(root)
+        return int(self.diff)
+
+    def helper(self, node):
+        if not node:
+            return
+        self.helper(node.left)
+        self.diff = min(float(self.diff), abs(float(self.pre)-node.val))
+        self.pre = node.val
+        self.helper(node.right)
+
 
 
 
