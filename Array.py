@@ -32,6 +32,16 @@ class Solution:
             if nums[i]==val:
                 nums.pop(i)
         return len(nums)
+   # 方法四
+   def remove_element(nums, val):
+      while val in nums:
+           nums.remove(val)
+      return len(nums)
+
+test = [0,1,2,2,3,0,4,2]
+print(remove_element(test, 2))
+print(test)
+
 
 '''
 26. Remove Duplicates from Sorted Array: 删除排序数组中的重复项
